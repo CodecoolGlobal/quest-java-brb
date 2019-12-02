@@ -1,12 +1,12 @@
 package com.codecool.quest.logic;
 
 import com.codecool.quest.logic.actors.Player;
+import com.codecool.quest.logic.items.Weapon;
 
 public class GameMap {
     private int width;
     private int height;
     private Cell[][] cells;
-
     private Player player;
 
     public GameMap(int width, int height, CellType defaultCellType) {
