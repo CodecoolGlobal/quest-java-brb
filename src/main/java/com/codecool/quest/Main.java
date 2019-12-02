@@ -68,7 +68,12 @@ public class Main extends Application {
                 map.getPlayer().move(1,0);
                 refresh();
                 break;
+            case ENTER:
+                map.getPlayer().pickUp();
+                refresh();
+
         }
+        System.out.println(map.getPlayer().getInventory());
     }
 
     private void refresh() {
