@@ -28,7 +28,10 @@ public class Tiles {
     static {
         tileMap.put("wall", new Tile(10, 17));
         tileMap.put("floor", new Tile(2, 0));
+
         tileMap.put("player", new Tile(27, 1));
+        tileMap.put("weaponedPlayer", new Tile(27, 2));
+
         tileMap.put("skeleton", new Tile(29, 6));
         tileMap.put("weapon", new Tile(7, 29));
     }
