@@ -3,6 +3,10 @@ package com.codecool.quest.logic;
 import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.items.Item;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
@@ -43,6 +47,25 @@ public class Cell implements Drawable {
 
     public Cell getNeighbor(int dx, int dy) {
         return gameMap.getCell(x + dx, y + dy);
+    }
+
+    public List<Cell> getAllNeighbors(){
+        return new ArrayList<>(){{
+            add(getNeighbor(1,0));
+            add(getNeighbor(0,1));
+            add(getNeighbor(-1,0));
+            add(getNeighbor(0,-1));
+        }};
+    }
+
+    public void checkDoors(){
+        for (Cell cell: getAllNeighbors()) {
+            if(cell.getTileName().equals("closeddoor")) cell.unlockDoor();
+        }
+    }
+
+    private void unlockDoor() {
+        this.setType(CellType.OPENDOOR);
     }
 
     @Override

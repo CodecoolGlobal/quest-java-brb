@@ -22,7 +22,7 @@ public class Player extends Actor {
     }
 
     public String getTileName() {
-        return !this.hasWeapon() ? "player" : "weaponedPlayer";
+        return !this.hasItem(Weapon.class) ? "player" : "weaponedPlayer";
     }
 
     public void pickUp(){
@@ -30,10 +30,15 @@ public class Player extends Actor {
         this.getCell().setItem(null);
     }
 
-    public boolean hasWeapon(){
+    public boolean hasItem(Class<?> type){
+
         for (Item item : this.inventory){
-            if(item instanceof Weapon) return true;
+            if(type.isInstance(item)) return true;
         }
         return false;
+    }
+
+    public void useKey(){
+        if(this.hasItem(Key.class))
     }
 }

@@ -4,11 +4,14 @@ import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.GameMap;
 import com.codecool.quest.logic.MapLoader;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -22,7 +25,8 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
-
+    Label inverntoryLabel= new Label();
+    ListView<String> list = new ListView<>();
     public static void main(String[] args) {
         launch(args);
     }
@@ -35,6 +39,18 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+
+
+        ui.add(new Label("Inverntory: "),0,1);
+        ui.add(inverntoryLabel,1,1);
+
+
+        ObservableList<String> items = FXCollections.observableArrayList (
+                "Single", "Double", "Suite", "Family App");
+        list.setItems(items);
+        list.setPrefWidth(100);
+        list.setPrefHeight(70);
+
 
         BorderPane borderPane = new BorderPane();
 
@@ -71,6 +87,9 @@ public class Main extends Application {
             case ENTER:
                 map.getPlayer().pickUp();
                 refresh();
+                break;
+            case K:
+
 
         }
         System.out.println(map.getPlayer().getInventory());
