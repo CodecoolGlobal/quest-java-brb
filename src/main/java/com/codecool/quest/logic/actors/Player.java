@@ -4,6 +4,7 @@ import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.CellType;
 import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.items.Item;
+import com.codecool.quest.logic.items.Key;
 import com.codecool.quest.logic.items.Weapon;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Player extends Actor {
     }
 
     public String getTileName() {
-        return !this.hasWeapon() ? "player" : "weaponedPlayer";
+        return !this.hasItem(Weapon.class) ? "player" : "weaponedPlayer";
     }
 
     public void pickUp(){
@@ -30,9 +31,9 @@ public class Player extends Actor {
         this.getCell().setItem(null);
     }
 
-    public boolean hasWeapon(){
-        for (Item item : this.inventory){
-            if(item instanceof Weapon) return true;
+    public boolean hasItem(Class<?> type){
+        for (Item item : this.inventory) {
+            if (type.isInstance(item)) return true;
         }
         return false;
     }

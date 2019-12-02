@@ -1,8 +1,10 @@
 package com.codecool.quest.logic;
 
 public enum CellType {
-    GRENNERY("greenery"),
+    GREENERY("greenery"),
     FLOOR("floor"),
+    CLOSEDDOOR("closeddoor"),
+    OPENDOOR("opendoor"),
     WALL("wall");
 
     private final String tileName;

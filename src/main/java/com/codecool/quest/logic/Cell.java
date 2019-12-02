@@ -14,6 +14,15 @@ public class Cell implements Drawable {
         return item;
     }
 
+    public boolean isObstacle() {
+        if (!this.getTileName().equals("wall")
+                && this.getActor() == null
+                && (!this.getTileName().equals("closeddoor"))){
+            return true;
+        }
+        return false;
+    }
+
     public void setItem(Item item) {
         this.item = item;
     }
