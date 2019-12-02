@@ -1,7 +1,7 @@
 package com.codecool.quest.logic;
 
 public enum CellType {
-    EMPTY("empty"),
+    GRENNERY("greenery"),
     FLOOR("floor"),
     WALL("wall");
 
