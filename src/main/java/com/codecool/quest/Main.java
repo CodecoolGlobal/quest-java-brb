@@ -89,7 +89,9 @@ public class Main extends Application {
                 refresh();
                 break;
             case K:
-
+                map.getPlayer().useKey();
+                refresh();
+                break;
 
         }
         System.out.println(map.getPlayer().getInventory());

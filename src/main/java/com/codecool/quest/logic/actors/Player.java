@@ -4,6 +4,7 @@ import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.CellType;
 import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.items.Item;
+import com.codecool.quest.logic.items.Key;
 import com.codecool.quest.logic.items.Weapon;
 
 import java.util.ArrayList;
@@ -31,14 +32,16 @@ public class Player extends Actor {
     }
 
     public boolean hasItem(Class<?> type){
-
-        for (Item item : this.inventory){
-            if(type.isInstance(item)) return true;
+        for (Item item : this.inventory) {
+            if (type.isInstance(item)) return true;
         }
         return false;
     }
 
     public void useKey(){
-        if(this.hasItem(Key.class))
+        if(this.hasItem(Key.class)){
+            this.getCell().checkDoors();
+        }
+
     }
 }
