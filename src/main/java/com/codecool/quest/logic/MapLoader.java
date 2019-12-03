@@ -1,5 +1,6 @@
 package com.codecool.quest.logic;
 
+import com.codecool.quest.Tiles;
 import com.codecool.quest.logic.actors.Player;
 import com.codecool.quest.logic.actors.Skeleton;
 import com.codecool.quest.logic.items.Key;
@@ -16,7 +17,7 @@ public class MapLoader {
         int height = scanner.nextInt();
 
         scanner.nextLine(); // empty line
-
+        Tiles.generateGreenery();
         GameMap map = new GameMap(width, height, CellType.GREENERY);
         for (int y = 0; y < height; y++) {
             String line = scanner.nextLine();

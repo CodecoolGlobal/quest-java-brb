@@ -4,16 +4,15 @@ import com.codecool.quest.logic.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Tiles {
     public static int TILE_WIDTH = 32;
 
     private static Image tileset = new Image("/tiles.png", 543 * 2, 543 * 2, true, false);
     private static Map<String, Tile> tileMap = new HashMap<>();
-
+    public static ArrayList<Integer> greenery = new ArrayList<>();
+    public static ListIterator<Integer> iterator = greenery.listIterator();
     public static class Tile {
         public final int x, y, w, h;
 
@@ -41,7 +40,7 @@ public class Tiles {
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
         Tile tile;
         if (d.getTileName().equals("greenery")) {
-            tile = new Tile(getRandomNumber(8), getRandomNumber(3));
+            tile = new Tile(iterator.next(), iterator.next());
         } else {
             tile = tileMap.get(d.getTileName());
         }
@@ -50,8 +49,15 @@ public class Tiles {
 
     }
 
-    private static int getRandomNumber(int a) {
-        Random rand = new Random();
-        return rand.nextInt(a);
+    public static double getRandomIntegerBetweenRange(double min, double max){
+        double x = (int)(Math.random()*((max-min)+1))+min;
+        return x;
+    }
+
+    public static void generateGreenery(){
+        for (int i = 0;i<500;i++){
+            greenery.add((int) getRandomIntegerBetweenRange(0,7));
+            greenery.add((int) getRandomIntegerBetweenRange(0,2));
+        }
     }
 }
