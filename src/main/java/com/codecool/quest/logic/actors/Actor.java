@@ -6,6 +6,15 @@ import com.codecool.quest.logic.Drawable;
 public abstract class Actor implements Drawable {
     private Cell cell;
     private int health = 10;
+    private int power = 3;
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
 
     public Actor(Cell cell) {
         this.cell = cell;

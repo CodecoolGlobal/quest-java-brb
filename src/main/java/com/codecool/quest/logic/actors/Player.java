@@ -18,17 +18,27 @@ public class Player extends Actor {
 
     private List<Item> inventory = new ArrayList<>();
 
+    private String tileName;
+
     public Player(Cell cell) {
         super(cell);
+        this.tileName = "player";
     }
 
     public String getTileName() {
-        return !this.hasItem(Weapon.class) ? "player" : "weaponedPlayer";
+        return tileName;
+    }
+
+    public void setTileName(String tileName) {
+        this.tileName = tileName;
     }
 
     public void pickUp(){
-        this.inventory.add(this.getCell().getItem());
-        this.getCell().setItem(null);
+        if(this.getCell().getItem() != null){
+            this.getCell().getItem().pickedUp(this);
+            this.getCell().setItem(null);
+
+        }
     }
 
     public boolean hasItem(Class<?> type){
@@ -38,9 +48,17 @@ public class Player extends Actor {
         return false;
     }
 
+
     public void useKey(){
-        if(this.hasItem(Key.class)){
-            this.getCell().checkDoors();
+        this.getCell().checkDoors();
+    }
+
+    public void useItem(Class<?> type){
+        if(this.hasItem(type)){
+            if (Key.class.equals(type)) {
+                useKey();
+            }
+
         }
 
     }

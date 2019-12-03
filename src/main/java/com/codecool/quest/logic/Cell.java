@@ -69,12 +69,12 @@ public class Cell implements Drawable {
 
     public void checkDoors(){
         for (Cell cell: getAllNeighbors()) {
-            if(cell.getTileName().equals("closeddoor")) cell.unlockDoor();
+            if(cell.getTileName().equals("closeddoor") || cell.getTileName().equals("opendoor")) cell.unlockDoor();
         }
     }
 
     private void unlockDoor() {
-        this.setType(CellType.OPENDOOR);
+        this.setType(this.getTileName().equals("closeddoor") ? CellType.OPENDOOR: CellType.CLOSEDDOOR);
     }
 
     @Override
