@@ -5,6 +5,9 @@ import com.codecool.quest.logic.GameMap;
 import com.codecool.quest.logic.MapLoader;
 import com.codecool.quest.logic.items.Item;
 import com.codecool.quest.logic.items.Key;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +26,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 
@@ -39,6 +43,9 @@ public class Main extends Application {
     HashMap<String, Class> itemTypes = new HashMap<>(){{
         put("key",Key.class);
     }};
+    Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> moveSkeleton())
+    );
 
 
     public static void main(String[] args) {
@@ -79,10 +86,12 @@ public class Main extends Application {
 
         primaryStage.setTitle("Codecool Quest");
         primaryStage.show();
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     private void itemUsed() {
-        // Kell Valami ami az item neveéből vissza adja a megfelelo Classt hozza
+        // Kell Valami ami az item nevéből vissza adja a megfelelo Classt hozza
 
         map.getPlayer().useItem(itemTypes.get(list.getSelectionModel().getSelectedItem()));
         refresh();
@@ -125,6 +134,30 @@ public class Main extends Application {
 
         }
     }
+
+    private void moveSkeleton() {
+        double random = Tiles.getRandomIntegerBetweenRange(0, 5);
+        int value = (int) random;
+        switch(value) {
+            case 0:
+                break;
+            case 1:
+                map.getSkeleton().move(0, -1);
+                break;
+            case 2:
+                map.getSkeleton().move(0, 1);
+                break;
+            case 3:
+                map.getSkeleton().move(-1, 0);
+                break;
+            case 4:
+                map.getSkeleton().move(1, 0);
+                break;
+        }
+        refresh();
+    }
+
+
 
     private void refresh() {
         context.setFill(Color.BLACK);

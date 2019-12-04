@@ -19,12 +19,9 @@ public class Cell implements Drawable {
     }
 
     public boolean isObstacle() {
-        if (!this.getTileName().equals("wall")
-                && this.getActor() == null
-                && (!this.getTileName().equals("closeddoor"))){
-            return true;
-        }
-        return false;
+        return this.getTileName().equals("wall")
+                || this.getActor() != null
+                || (this.getTileName().equals("closeddoor"));
     }
 
     public void setItem(Item item) {
