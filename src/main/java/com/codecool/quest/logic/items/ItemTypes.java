@@ -3,12 +3,14 @@ package com.codecool.quest.logic.items;
 import java.util.Random;
 
 public enum ItemTypes {
-    HEALTHPOTION(HealthPotion.class);
+    HEALTHPOTION(HealthPotion.class),
+    HEART(Heart.class),
+    AXE(Axe.class);
 
 
     private final Class itemName;
 
-    ItemTypes(Class<HealthPotion> itemName) {
+    ItemTypes(Class<?> itemName) {
         this.itemName = itemName;
     }
 

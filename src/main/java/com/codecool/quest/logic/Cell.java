@@ -47,7 +47,7 @@ public class Cell implements Drawable {
         this.actor = actor;
     }
 
-    public Actor getActor() {
+    public Actor getActor() {   
         return actor;
     }
 

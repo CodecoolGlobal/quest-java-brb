@@ -1,12 +1,10 @@
 package com.codecool.quest.logic;
 
 import com.codecool.quest.Tiles;
+import com.codecool.quest.logic.actors.Monster;
 import com.codecool.quest.logic.actors.Player;
 import com.codecool.quest.logic.actors.Skeleton;
-import com.codecool.quest.logic.items.Heart;
-import com.codecool.quest.logic.items.HealthPotion;
-import com.codecool.quest.logic.items.Key;
-import com.codecool.quest.logic.items.Weapon;
+import com.codecool.quest.logic.items.*;
 
 import java.io.InputStream;
 import java.util.Scanner;
@@ -53,17 +51,25 @@ public class MapLoader {
                         case 'T':
                             cell.setType(CellType.TORCH);
                             break;
-                        case 's':
+                        case 'S':
                             cell.setType(CellType.FLOOR);
                             map.setSkeleton(new Skeleton(cell));
+                            break;
+                        case 'M':
+                            cell.setType(CellType.FLOOR);
+                            map.setMonster(new Monster(cell));
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
                             map.setPlayer(new Player(cell));
                             break;
-                        case '$':
+                        case '|':
                             cell.setType(CellType.FLOOR);
-                            new Weapon(cell);
+                            new Sword(cell);
+                            break;
+                        case 'A':
+                            cell.setType(CellType.FLOOR);
+                            new Axe(cell);
                             break;
                         case 'P':
                             cell.setType(CellType.FLOOR);

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Actor {
-
     public List<Item> getInventory() {
         return inventory;
     }
@@ -24,16 +23,12 @@ public class Player extends Actor {
         return null;
     }
 
-    private List<Item> inventory = new ArrayList<>();
-
-    private String tileName;
-
     public Player(Cell cell) {
         super(cell);
-        this.tileName = "player";
         setHealth(10);
         setPower(3);
         setMaxHealth(15);
+        setBasePower(2);
     }
 
     public String getTileName() {

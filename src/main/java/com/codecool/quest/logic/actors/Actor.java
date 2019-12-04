@@ -2,13 +2,28 @@ package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.Drawable;
+import com.codecool.quest.logic.items.Item;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Actor implements Drawable {
+    protected List<Item> inventory = new ArrayList<>();
+    protected String tileName;
     private Cell cell;
     private int health;
+
+    public int getBasePower() {
+        return basePower;
+    }
+
+    public void setBasePower(int basePower) {
+        this.basePower = basePower;
+    }
+
     private int power;
+    private int basePower;
 
     public int getMaxHealth() {
         return maxHealth;
@@ -35,6 +50,7 @@ public abstract class Actor implements Drawable {
     public Actor(Cell cell) {
         this.cell = cell;
         this.cell.setActor(this);
+        this.tileName = "player";
     }
 
     public void move(int dx, int dy) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
@@ -79,7 +95,7 @@ public abstract class Actor implements Drawable {
     public void die() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         this.getCell().setActor(null);
         if(this instanceof Enemy) ((Enemy) this).dropLoot();
-        this.getCell().getActor() = null;yes;
+
     }
 
     public int getX() {

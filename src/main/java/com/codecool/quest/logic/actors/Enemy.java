@@ -14,4 +14,6 @@ public abstract class Enemy extends Actor{
         Class randomItem = ItemTypes.getRandomItem();
         randomItem.getConstructor(Cell.class).newInstance(this.getCell());
     }
+
+
 }

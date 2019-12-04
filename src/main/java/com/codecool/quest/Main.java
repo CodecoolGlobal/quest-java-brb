@@ -55,14 +55,8 @@ public class Main extends Application {
     Timeline timeline = new Timeline(
             new KeyFrame(Duration.seconds(1), e -> {
                 try {
-                    moveSkeleton();
-                } catch (NoSuchMethodException ex) {
-                    ex.printStackTrace();
-                } catch (InstantiationException ex) {
-                    ex.printStackTrace();
-                } catch (IllegalAccessException ex) {
-                    ex.printStackTrace();
-                } catch (InvocationTargetException ex) {
+                    moveEnemies();
+                } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
             })
@@ -131,7 +125,6 @@ public class Main extends Application {
 
     private void itemUsed() {
         // Kell Valami ami az item nevéből vissza adja a megfelelo Classt hozza
-
         map.getPlayer().useItem(itemTypes.get(list.getSelectionModel().getSelectedItem()));
         refresh();
     }
@@ -197,30 +190,32 @@ public class Main extends Application {
                 break;
 
         }
-        System.out.println(map.getPlayer().getInventory());
         refresh();
         endGame();
     }
 
-    private void moveSkeleton() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        double random = Tiles.getRandomIntegerBetweenRange(0, 5);
-        int value = (int) random;
-        switch(value) {
-            case 0:
-                break;
-            case 1:
-                map.getSkeleton().move(0, -1);
-                break;
-            case 2:
-                map.getSkeleton().move(0, 1);
-                break;
-            case 3:
-                map.getSkeleton().move(-1, 0);
-                break;
-            case 4:
-                map.getSkeleton().move(1, 0);
-                break;
+    private void moveEnemies() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        for (Actor enemy: map.getAllEnemies()) {
+            double random = Tiles.getRandomIntegerBetweenRange(0, 5);
+            int value = (int) random;
+            switch(value) {
+                case 0:
+                    break;
+                case 1:
+                    enemy.move(0, -1);
+                    break;
+                case 2:
+                    enemy.move(0, 1);
+                    break;
+                case 3:
+                    enemy.move(-1, 0);
+                    break;
+                case 4:
+                    enemy.move(1, 0);
+                    break;
+            }
         }
+
         refresh();
     }
 

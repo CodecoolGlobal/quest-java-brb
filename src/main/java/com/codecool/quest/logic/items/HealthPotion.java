@@ -7,7 +7,6 @@ import com.codecool.quest.logic.actors.Player;
 public class HealthPotion extends Item{
     private int healPower = 3;
 
-
     public HealthPotion(Cell cell) {
         super(cell);
     }

@@ -1,8 +1,10 @@
 package com.codecool.quest.logic;
 
-import com.codecool.quest.logic.actors.Player;
-import com.codecool.quest.logic.actors.Skeleton;
+import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.Weapon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameMap {
     private int width;
@@ -10,6 +12,7 @@ public class GameMap {
     private Cell[][] cells;
     private Player player;
     private Skeleton skeleton;
+    private Monster monster;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -30,6 +33,16 @@ public class GameMap {
         this.player = player;
     }
 
+    public List<Actor> getAllEnemies(){
+        List<Actor> enemies = new ArrayList<>();
+        for(int row = 0;row<width;row++){
+            for(int col = 0;col<height;col++){
+                if(getCell(row,col).getActor() instanceof Enemy) enemies.add(getCell(row,col).getActor());
+            }
+        }
+        return enemies;
+    }
+
     public Player getPlayer() {
         return player;
     }
@@ -44,5 +57,9 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void setMonster(Monster monster) {
+        this.monster = monster;
     }
 }
