@@ -14,6 +14,10 @@ public class Heart extends Item {
     }
 
     @Override
+    public void use(Player player) {
+    }
+
+    @Override
     public String getTileName() {
         return "heart";
     }

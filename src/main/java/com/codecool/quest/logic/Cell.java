@@ -21,7 +21,7 @@ public class Cell implements Drawable {
     public boolean isObstacle() {
         return this.getTileName().equals("wall")
                 || this.getActor() != null
-                || (this.getTileName().equals("closeddoor"));
+                || this.getTileName().equals("closeddoor");
     }
 
     public void setItem(Item item) {
@@ -53,6 +53,15 @@ public class Cell implements Drawable {
 
     public Cell getNeighbor(int dx, int dy) {
         return gameMap.getCell(x + dx, y + dy);
+    }
+
+    public List<Actor> getAdjacentEnemies(){
+        List<Cell> cells = getAllNeighbors();
+        List<Actor> enemies = new ArrayList<>();
+        for (Cell cell : cells){
+            if (cell.getActor() != null) enemies.add(cell.getActor());
+        }
+        return enemies;
     }
 
     public List<Cell> getAllNeighbors(){

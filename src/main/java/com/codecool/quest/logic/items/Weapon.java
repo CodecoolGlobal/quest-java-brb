@@ -22,6 +22,11 @@ public class Weapon extends Item{
     }
 
     @Override
+    public void use(Player player) {
+
+    }
+
+    @Override
     public String getTileName() {
         return "weapon";
     }

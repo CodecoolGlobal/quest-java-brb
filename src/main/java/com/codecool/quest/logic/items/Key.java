@@ -10,9 +10,13 @@ public class Key extends Item{
     }
 
     @Override
-
     public void pickedUp(Player player) {
         player.getInventory().add(this);
+    }
+
+    @Override
+    public void use(Player player) {
+        player.getCell().checkDoors();
     }
 
     @Override
