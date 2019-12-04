@@ -3,6 +3,7 @@ package com.codecool.quest.logic.actors;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.CellType;
 import com.codecool.quest.logic.actors.Actor;
+import com.codecool.quest.logic.items.HealthPotion;
 import com.codecool.quest.logic.items.Item;
 import com.codecool.quest.logic.items.Key;
 import com.codecool.quest.logic.items.Weapon;
@@ -16,6 +17,13 @@ public class Player extends Actor {
         return inventory;
     }
 
+    public Item inventoryGetItem(Class<?> type){
+        for(Item item : getInventory()){
+            if(item.getClass().equals(type)) return item;
+        }
+        return null;
+    }
+
     private List<Item> inventory = new ArrayList<>();
 
     private String tileName;
@@ -23,6 +31,9 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell);
         this.tileName = "player";
+        setHealth(10);
+        setPower(3);
+        setMaxHealth(15);
     }
 
     public String getTileName() {
@@ -37,28 +48,25 @@ public class Player extends Actor {
         if(this.getCell().getItem() != null){
             this.getCell().getItem().pickedUp(this);
             this.getCell().setItem(null);
-
         }
     }
 
     public boolean hasItem(Class<?> type){
+        if(type == null) return false;
         for (Item item : this.inventory) {
             if (type.isInstance(item)) return true;
         }
         return false;
     }
 
+    public void removeFromInventory(Item item){
 
-    public void useKey(){
-        this.getCell().checkDoors();
+        this.inventory.removeIf(deleteItem -> deleteItem.hashCode() == item.hashCode());
     }
 
     public void useItem(Class<?> type){
         if(this.hasItem(type)){
-            if (Key.class.equals(type)) {
-                useKey();
-            }
-
+            inventoryGetItem(type).use(this);
         }
 
     }

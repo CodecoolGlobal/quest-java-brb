@@ -1,11 +1,12 @@
 package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
-import com.codecool.quest.logic.actors.Actor;
 
-public class Skeleton extends Actor {
+public class Skeleton extends Enemy {
     public Skeleton(Cell cell) {
         super(cell);
+        setHealth(8);
+        setPower(2);
     }
 
     @Override

@@ -34,6 +34,7 @@ public class Tiles {
         tileMap.put("closeddoor", new Tile(3, 3));
         tileMap.put("opendoor", new Tile(4, 3));
         tileMap.put("key", new Tile(16, 23));
+        tileMap.put("healthPotion", new Tile(16, 28));
 
     }
 
