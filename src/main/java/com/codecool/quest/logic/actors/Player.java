@@ -1,14 +1,7 @@
 package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
-import com.codecool.quest.logic.CellType;
-import com.codecool.quest.logic.actors.Actor;
-import com.codecool.quest.logic.items.HealthPotion;
 import com.codecool.quest.logic.items.Item;
-import com.codecool.quest.logic.items.Key;
-import com.codecool.quest.logic.items.Weapon;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Actor {
@@ -55,7 +48,6 @@ public class Player extends Actor {
     }
 
     public void removeFromInventory(Item item){
-
         this.inventory.removeIf(deleteItem -> deleteItem.hashCode() == item.hashCode());
     }
 
@@ -63,6 +55,10 @@ public class Player extends Actor {
         if(this.hasItem(type)){
             inventoryGetItem(type).use(this);
         }
-
     }
+
+    public boolean isStairs() {
+        return this.getCell().getTileName().equals("stairs");
+    }
+
 }

@@ -11,6 +11,9 @@ import java.util.List;
 public abstract class Actor implements Drawable {
     protected List<Item> inventory = new ArrayList<>();
     protected String tileName;
+    public void setCell(Cell cell) {
+        this.cell = cell;
+    }
     private Cell cell;
     private int health;
 
