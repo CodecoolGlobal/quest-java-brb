@@ -6,10 +6,11 @@ import com.codecool.quest.logic.actors.Player;
 public class Shield extends Armor {
     public Shield(Cell cell) {
         super(cell);
-        setResi(0.2);
         setMaxDurability(4);
         setDurability(getMaxDurability());
+        setResi(0.2);
     }
+
 
     @Override
     public void destroyArmory() {
@@ -20,7 +21,7 @@ public class Shield extends Armor {
     @Override
     public void pickedUp(Player player) {
         this.setPlayer(player);
-        player.setResi(player.getResi()+this.getResi());
+        player.setResi(player.getResi()-player.getShield().getResi()+this.getResi());
         player.setShield(this);
     }
 

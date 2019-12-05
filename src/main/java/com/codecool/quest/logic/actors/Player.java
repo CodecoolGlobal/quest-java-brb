@@ -7,8 +7,8 @@ import java.util.List;
 public class Player extends Actor {
 
     private Armory weapon;
-    private Armory helmet;
-    private Armory shield;
+    private Helmet helmet;
+    private Shield shield;
     private Armory boots;
     private Armory gloves;
     private Armory plate;
@@ -34,19 +34,19 @@ public class Player extends Actor {
         this.weapon = weapon;
     }
 
-    public Armory getHelmet() {
+    public Helmet getHelmet() {
         return helmet;
     }
 
-    public void setHelmet(Armory helmet) {
+    public void setHelmet(Helmet helmet) {
         this.helmet = helmet;
     }
 
-    public Armory getShield() {
+    public Shield getShield() {
         return shield;
     }
 
-    public void setShield(Armory shield) {
+    public void setShield(Shield shield) {
         this.shield = shield;
     }
 

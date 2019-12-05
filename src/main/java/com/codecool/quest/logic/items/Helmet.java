@@ -8,7 +8,7 @@ public class Helmet extends Armor {
         super(cell);
         setMaxDurability(3);
         setDurability(getMaxDurability());
-        setResi(0.1);
+        setResi(0.15);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Helmet extends Armor {
     @Override
     public void pickedUp(Player player) {
         this.setPlayer(player);
-        player.setResi(player.getResi()+this.getResi());
+        player.setResi(player.getResi()-player.getHelmet().getResi()+this.getResi());
         player.setHelmet(this);
     }
 

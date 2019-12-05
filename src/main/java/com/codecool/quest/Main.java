@@ -22,8 +22,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -86,6 +85,9 @@ public class Main extends Application {
         setUpPower();
         setUpInventory();
         setUpCombatLogs();
+        ui.setGridLinesVisible(false);
+        ui.setVgap(3);
+
         Label dura = new Label("Durability:");
         ui.add(dura,0,5);
         dura.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
@@ -131,7 +133,7 @@ public class Main extends Application {
     }
 
     public void setUpHealth() {
-        Label hp = new Label("Health: ");
+        Label hp = new Label("Health:");
         ui.add(hp, 0, 0);
         hp.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         hp.setTextFill(Color.GREEN);
@@ -142,7 +144,7 @@ public class Main extends Application {
     }
 
     public void setUpPower() {
-        Label pwr = new Label("Power: ");
+        Label pwr = new Label("Attack:");
         ui.add(pwr, 0, 1);
         pwr.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         pwr.setTextFill(Color.RED);
@@ -153,7 +155,7 @@ public class Main extends Application {
     }
 
     public void setUpInventory() {
-        Label inventory = new Label("Inventory: ");
+        Label inventory = new Label("Inventory:");
         ui.add(inventory, 0, 3);
         inventory.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         inventory.setTextFill((Color.SLATEBLUE));
@@ -312,7 +314,7 @@ public class Main extends Application {
         List<Actor> enemies = map.getPlayer().getCell().getAdjacentEnemies();
         StringBuilder status = new StringBuilder();
         for (Actor enemy : enemies){
-            status.append("  ").append(enemy.getTileName()).append(" HP: ").append(enemy.getHealth()).append(" ").append("Pwr: ").append(enemy.getPower()).append("\n");
+            status.append(enemy.getTileName()).append(":\n").append("   HP: ").append(enemy.getHealth()).append("\n").append("   Attack: ").append(enemy.getPower()).append("\n");
         }
         combatingLabel.setText("" + status);
     }
@@ -337,7 +339,7 @@ public class Main extends Application {
         }
     }
     private void updateLabels(){
-        healthLabel.setText("" + map.getPlayer().getHealth());
+        healthLabel.setText("" + map.getPlayer().getHealth() +"/"+map.getPlayer().getMaxHealth());
         powerLabel.setText("" + map.getPlayer().getPower());
         defenseLabel.setText("" + Math.round(map.getPlayer().getResi() * 100));
     }
