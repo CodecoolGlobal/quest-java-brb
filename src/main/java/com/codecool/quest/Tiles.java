@@ -39,8 +39,11 @@ public class Tiles {
         tileMap.put("stairs", new Tile(4, 6));
         tileMap.put("heart", new Tile(23, 22));
         tileMap.put("torch", new Tile(4, 15));
-        tileMap.put("healthPotion", new Tile(16, 28));
-
+        tileMap.put("healthPotion", new Tile(17, 25));
+        tileMap.put("laserpistol", new Tile (6, 31));
+        tileMap.put("golem", new Tile(30, 6));
+        tileMap.put("banshee", new Tile(27, 6));
+        tileMap.put("wateredge", new Tile(9, 5));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {

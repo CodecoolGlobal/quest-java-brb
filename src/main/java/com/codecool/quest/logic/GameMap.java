@@ -1,8 +1,6 @@
 package com.codecool.quest.logic;
 
 import com.codecool.quest.logic.actors.*;
-import com.codecool.quest.logic.items.Weapon;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +11,8 @@ public class GameMap {
     private Player player;
     private Skeleton skeleton;
     private Monster monster;
+    private Golem golem;
+    private Banshee banshee;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -29,10 +29,6 @@ public class GameMap {
         return cells[x][y];
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
     public List<Actor> getAllEnemies(){
         List<Actor> enemies = new ArrayList<>();
         for(int row = 0;row<width;row++){
@@ -43,11 +39,10 @@ public class GameMap {
         return enemies;
     }
 
+
     public Player getPlayer() {
         return player;
     }
-
-    public void setSkeleton(Skeleton skeleton) { this.skeleton = skeleton; }
 
     public Skeleton getSkeleton() { return skeleton; }
 
@@ -59,7 +54,21 @@ public class GameMap {
         return height;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setSkeleton(Skeleton skeleton) { this.skeleton = skeleton; }
+
     public void setMonster(Monster monster) {
         this.monster = monster;
+    }
+
+    public void setGolem(Golem golem) {
+        this.golem = golem;
+    }
+
+    public void setBanshee(Banshee banshee) {
+        this.banshee = banshee;
     }
 }
