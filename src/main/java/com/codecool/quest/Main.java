@@ -92,7 +92,9 @@ public class Main extends Application {
         shieldDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(weaponDurability, 0, 6);
         weaponDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        ui.add(new Label("Defense: "), 0, 2);
+        Label defense = new Label("Defense: ");
+        ui.add(defense, 0, 2);
+        defense.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(defenseLabel, 1, 2);
         defenseLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         BorderPane borderPane = new BorderPane();
