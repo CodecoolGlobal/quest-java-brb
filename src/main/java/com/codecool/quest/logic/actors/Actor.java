@@ -2,6 +2,7 @@ package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.Drawable;
+import com.codecool.quest.logic.items.Consumable;
 import com.codecool.quest.logic.items.Item;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Actor implements Drawable {
-    protected List<Item> inventory = new ArrayList<>();
+    protected List<Consumable> inventory = new ArrayList<>();
     protected String tileName;
     private Cell cell;
     private int health;
@@ -55,7 +56,8 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getActor() != null) this.attack(nextCell);
+        if (this instanceof Player && nextCell.getActor() instanceof Enemy )  this.attack(nextCell);
+        else if (this instanceof Enemy && nextCell.getActor() instanceof Player) this.attack(nextCell);
         if (!nextCell.isObstacle()) {
             cell.setActor(null);
             nextCell.setActor(this);
@@ -66,9 +68,9 @@ public abstract class Actor implements Drawable {
     public void attack(Cell cell) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Actor enemy = cell.getActor();
         enemy.setHealth(enemy.getHealth() - this.getPower());
-        this.setHealth(this.getHealth() - enemy.getPower());
-        if(this.isDead()) this.die();
         if(enemy.isDead()) enemy.die();
+        else this.setHealth(this.getHealth() - enemy.getPower());
+        if(this.isDead()) this.die();
     }
 
     public int getHealth() {

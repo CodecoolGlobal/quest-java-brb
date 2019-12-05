@@ -6,6 +6,7 @@ public class Axe extends Weapon{
     public Axe(Cell cell) {
         super(cell);
         setPower(4);
+        setDurability(5);
     }
 
     @Override

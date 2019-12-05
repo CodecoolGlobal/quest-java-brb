@@ -4,7 +4,7 @@ import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.actors.Player;
 
-public class Weapon extends Item{
+public class Weapon extends Armory{
     int power;
 
     public void setPower(int power) {
@@ -25,10 +25,6 @@ public class Weapon extends Item{
         player.setTileName("weaponedPlayer");
     }
 
-    @Override
-    public void use(Player player) {
-
-    }
 
     @Override
     public String getTileName() {

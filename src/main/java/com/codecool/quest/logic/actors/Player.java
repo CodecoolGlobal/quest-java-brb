@@ -3,21 +3,18 @@ package com.codecool.quest.logic.actors;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.CellType;
 import com.codecool.quest.logic.actors.Actor;
-import com.codecool.quest.logic.items.HealthPotion;
-import com.codecool.quest.logic.items.Item;
-import com.codecool.quest.logic.items.Key;
-import com.codecool.quest.logic.items.Weapon;
+import com.codecool.quest.logic.items.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Actor {
-    public List<Item> getInventory() {
+    public List<Consumable> getInventory() {
         return inventory;
     }
 
-    public Item inventoryGetItem(Class<?> type){
-        for(Item item : getInventory()){
+    public Consumable inventoryGetItem(Class<?> type){
+        for(Consumable item : getInventory()){
             if(item.getClass().equals(type)) return item;
         }
         return null;

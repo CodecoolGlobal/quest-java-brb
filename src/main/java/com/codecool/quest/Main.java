@@ -48,15 +48,15 @@ public class Main extends Application {
     ListView<String> list;
     Stage mainStage;
 
-    HashMap<String, Class<?>> itemTypes = new HashMap<>(){{
-        put("key",Key.class);
+    HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
+        put("key", Key.class);
         put("healthPotion", HealthPotion.class);
     }};
     Timeline timeline = new Timeline(
             new KeyFrame(Duration.seconds(1), e -> {
                 try {
                     moveEnemies();
-                } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
             })
@@ -89,7 +89,7 @@ public class Main extends Application {
         list.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
-        ui.add(list,0,3);
+        ui.add(list, 0, 3);
 
         ui.add(new Label("Combat: "), 0, 4);
         ui.add(combatingLabel, 0, 5);
@@ -120,7 +120,7 @@ public class Main extends Application {
     }
 
     public void endGame() throws Exception {
-        if(isGameOver()) showAlert();
+        if (isGameOver()) showAlert();
     }
 
     private void itemUsed() {
@@ -136,7 +136,7 @@ public class Main extends Application {
     }
 
 
-    public boolean isGameOver(){
+    public boolean isGameOver() {
         return map.getPlayer().isDead();
     }
 
@@ -155,7 +155,7 @@ public class Main extends Application {
         alert.getButtonTypes().setAll(buttonRestart, buttonClose);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonRestart){
+        if (result.get() == buttonRestart) {
             // ... user chose "restart"
             restart();
         } else {
@@ -164,9 +164,9 @@ public class Main extends Application {
         }
     }
 
-    private void updateInventory(){
+    private void updateInventory() {
         inventoryLabels.clear();
-        for(Item item : map.getPlayer().getInventory()){
+        for (Item item : map.getPlayer().getInventory()) {
             inventoryLabels.add(item.getTileName());
         }
     }
@@ -183,22 +183,21 @@ public class Main extends Application {
                 map.getPlayer().move(-1, 0);
                 break;
             case D:
-                map.getPlayer().move(1,0);
+                map.getPlayer().move(1, 0);
                 break;
             case E:
                 map.getPlayer().pickUp();
                 break;
-
         }
         refresh();
         endGame();
     }
 
     private void moveEnemies() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        for (Actor enemy: map.getAllEnemies()) {
+        for (Actor enemy : map.getAllEnemies()) {
             double random = Tiles.getRandomIntegerBetweenRange(0, 5);
             int value = (int) random;
-            switch(value) {
+            switch (value) {
                 case 0:
                     break;
                 case 1:
@@ -220,7 +219,6 @@ public class Main extends Application {
     }
 
 
-
     private void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -230,11 +228,9 @@ public class Main extends Application {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
-                }
-                else if(cell.getItem() != null){
+                } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x, y);
-                }
-                else {
+                } else {
                     Tiles.drawTile(context, cell, x, y);
                 }
             }
@@ -245,12 +241,12 @@ public class Main extends Application {
         updateInventory();
     }
 
-    private void updateNearbyEnemies(){
+    private void updateNearbyEnemies() {
         List<Actor> enemies = map.getPlayer().getCell().getAdjacentEnemies();
         StringBuilder status = new StringBuilder();
-        for (Actor enemy : enemies){
+        for (Actor enemy : enemies) {
             status.append(enemy.getTileName()).append("- Health: ").append(enemy.getHealth()).append(" ").append("Power: ").append(enemy.getPower()).append("\n");
         }
-        combatingLabel.setText(""+status);
+        combatingLabel.setText("" + status);
     }
 }
