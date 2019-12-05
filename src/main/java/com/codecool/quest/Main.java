@@ -86,17 +86,23 @@ public class Main extends Application {
         setUpPower();
         setUpInventory();
         setUpCombatLogs();
+        Label dura = new Label("Durability:");
+        ui.add(dura,0,5);
+        dura.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(helmetDurability,0,7);
-        helmetDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        helmetDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
         ui.add(shieldDurability,0,8);
-        shieldDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        shieldDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
         ui.add(weaponDurability, 0, 6);
-        weaponDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        weaponDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
         Label defense = new Label("Defense: ");
         ui.add(defense, 0, 2);
         defense.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        defense.setTextFill(Color.PURPLE);
         ui.add(defenseLabel, 1, 2);
         defenseLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        defenseLabel.setTextFill(Color.PURPLE);
+        defenseLabel.setEffect(new Glow(0.5));
         BorderPane borderPane = new BorderPane();
         bp = borderPane;
         borderPane.setCenter(canvas);
@@ -160,10 +166,12 @@ public class Main extends Application {
     }
 
     public void setUpCombatLogs() {
-        Label combat = new Label("Combat Logs: ");
+        Label combat = new Label("Nearby Enemies: ");
         ui.add(combat, 0, 14);
         combat.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(combatingLabel, 0, 15);
+        combatingLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13));
+
     }
 
     public void startEnemyMovement() {
@@ -304,28 +312,28 @@ public class Main extends Application {
         List<Actor> enemies = map.getPlayer().getCell().getAdjacentEnemies();
         StringBuilder status = new StringBuilder();
         for (Actor enemy : enemies){
-            status.append(enemy.getTileName()).append(" HP: ").append(enemy.getHealth()).append(" ").append("Pwr: ").append(enemy.getPower()).append("\n");
+            status.append("  ").append(enemy.getTileName()).append(" HP: ").append(enemy.getHealth()).append(" ").append("Pwr: ").append(enemy.getPower()).append("\n");
         }
         combatingLabel.setText("" + status);
     }
     private void updateDurabilites(){
         try{
-            weaponDurability.setText("Weapon Durability: "+ map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
+            weaponDurability.setText("  Weapon: "+ map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
         }
         catch (Exception e){
-            weaponDurability.setText("No weapon");
+            weaponDurability.setText("  No weapon");
         }
         try{
-            helmetDurability.setText("Helmet Durability: "+ map.getPlayer().getHelmet().getMaxDurability() + "/" + map.getPlayer().getHelmet().getDurability());
+            helmetDurability.setText("  Helmet: "+ map.getPlayer().getHelmet().getMaxDurability() + "/" + map.getPlayer().getHelmet().getDurability());
         }
         catch (Exception e){
-            helmetDurability.setText("No helmet");
+            helmetDurability.setText("  No helmet");
         }
         try{
-            shieldDurability.setText("Shield Durability: "+ map.getPlayer().getShield().getMaxDurability() + "/" + map.getPlayer().getShield().getDurability());
+            shieldDurability.setText("  Shield: "+ map.getPlayer().getShield().getMaxDurability() + "/" + map.getPlayer().getShield().getDurability());
         }
         catch (Exception e){
-            shieldDurability.setText("No shield");
+            shieldDurability.setText("  No shield");
         }
     }
     private void updateLabels(){
