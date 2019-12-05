@@ -3,18 +3,16 @@ package com.codecool.quest.logic.items;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.actors.Player;
 
-public class Heart extends Item {
-    public Heart(Cell cell) {
+public abstract class Consumable extends Item{
+    public Consumable(Cell cell) {
         super(cell);
     }
 
-    @Override
-    public void pickedUp(Player player) {
-        player.setHealth(player.getHealth() + 2);
-    }
+    public abstract void use(Player player);
 
     @Override
-    public String getTileName() {
-        return "heart";
+    public void pickedUp(Player player) {
+        player.getInventory().add(this);
     }
+
 }

@@ -2,6 +2,7 @@ package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.Drawable;
+import com.codecool.quest.logic.items.Consumable;
 import com.codecool.quest.logic.items.Item;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,13 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Actor implements Drawable {
-    protected List<Item> inventory = new ArrayList<>();
+    protected List<Consumable> inventory = new ArrayList<>();
     protected String tileName;
     public void setCell(Cell cell) {
         this.cell = cell;
     }
     private Cell cell;
     private int health;
+    private double resi = getBaseResi()-getResi();
+    private double baseResi = 1;
+
+    public double getBaseResi() {
+        return baseResi;
+    }
+
+    public double getResi() {
+        return resi;
+    }
+
+    public void setResi(double resi) {
+        this.resi = resi;
+    }
 
     public int getBasePower() {
         return basePower;
@@ -54,11 +69,21 @@ public abstract class Actor implements Drawable {
         this.cell = cell;
         this.cell.setActor(this);
         this.tileName = "player";
+        this.setResi(getBaseResi());
     }
 
     public void move(int dx, int dy) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getActor() != null) this.attack(nextCell);
+        if (this instanceof Player && nextCell.getActor() instanceof Enemy ){
+            this.attack(nextCell);
+            ((Player) this).getWeapon().loseDurability();
+
+        }
+        else if (this instanceof Enemy && nextCell.getActor() instanceof Player){
+            this.attack(nextCell);
+            ((Player) nextCell.getActor()).damageEquipment();
+
+        }
         if (!nextCell.isObstacle()) {
             cell.setActor(null);
             nextCell.setActor(this);
@@ -68,10 +93,13 @@ public abstract class Actor implements Drawable {
 
     public void attack(Cell cell) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Actor enemy = cell.getActor();
-        enemy.setHealth(enemy.getHealth() - this.getPower());
-        this.setHealth(this.getHealth() - enemy.getPower());
-        if(this.isDead()) this.die();
+        enemy.setHealth((int) (enemy.getHealth() - this.getPower() * enemy.getResi()));
         if(enemy.isDead()) enemy.die();
+        else{
+            this.setHealth((int) (this.getHealth() - enemy.getPower() * this.getResi()));
+        }
+        if(this.isDead()) this.die();
+
     }
 
     public int getHealth() {

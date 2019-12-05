@@ -92,6 +92,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Sword(cell);
                             break;
+                        case 'Á':
+                            cell.setType(CellType.FLOOR);
+                            new Shield(cell);
+                            break;
                         case 'A':
                             cell.setType(CellType.FLOOR);
                             new Axe(cell);
