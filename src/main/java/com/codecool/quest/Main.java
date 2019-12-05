@@ -37,7 +37,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    public GameMap getMap() {
+        return map;
+    }
+
+    GameMap map = MapLoader.loadMap("/level1.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -45,8 +49,10 @@ public class Main extends Application {
     Label healthLabel = new Label();
     Label combatingLabel = new Label();
     Label powerLabel = new Label();
+    GridPane ui = new GridPane();
     ListView<String> list;
     Stage mainStage;
+    BorderPane bp;
 
     HashMap<String, Class<?>> itemTypes = new HashMap<>(){{
         put("key",Key.class);
@@ -70,32 +76,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        GridPane ui = new GridPane();
-        ui.setPrefWidth(250);
-        ui.setPadding(new Insets(10));
-
-        ui.add(new Label("Health: "), 0, 0);
-        ui.add(healthLabel, 1, 0);
-        healthLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        healthLabel.setTextFill(Color.RED);
-        healthLabel.setEffect(new Glow(0.9));
-
-        ui.add(new Label("Power: "), 0, 1);
-        ui.add(powerLabel, 1, 1);
-
-        list = new ListView<>(inventoryLabels);
-        ui.add(new Label("Inventory: "), 0, 2);
-        list.setPrefSize(170, 90);
-        list.setOnKeyPressed(key -> {
-            if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
-        });
-        ui.add(list,0,3);
-
-        ui.add(new Label("Combat: "), 0, 4);
-        ui.add(combatingLabel, 0, 5);
+        setUpWindow();
+        setUpHealth();
+        setUpPower();
+        setUpInventory();
+        setUpCombatLogs();
 
         BorderPane borderPane = new BorderPane();
-
+        bp = borderPane;
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
 
@@ -112,11 +100,60 @@ public class Main extends Application {
         });
 
         primaryStage.setTitle("Codecool Quest");
-
         primaryStage.show();
+        startEnemyMovement();
+    }
+
+    public void setUpWindow() {
+        ui.setPrefWidth(250);
+        ui.setPadding(new Insets(10));
+    }
+
+    public void setUpHealth() {
+        Label hp = new Label("Health: ");
+        ui.add(hp, 0, 0);
+        hp.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        hp.setTextFill(Color.GREEN);
+        ui.add(healthLabel, 1, 0);
+        healthLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        healthLabel.setTextFill(Color.GREEN);
+        healthLabel.setEffect(new Glow(0.5));
+    }
+
+    public void setUpPower() {
+        Label pwr = new Label("Power: ");
+        ui.add(pwr, 0, 1);
+        pwr.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        pwr.setTextFill(Color.RED);
+        ui.add(powerLabel, 1, 1);
+        powerLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        powerLabel.setTextFill(Color.RED);
+        powerLabel.setEffect(new Glow(0.5));
+    }
+
+    public void setUpInventory() {
+        Label inventory = new Label("Inventory: ");
+        ui.add(inventory, 0, 2);
+        inventory.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        inventory.setTextFill((Color.SLATEBLUE));
+        list = new ListView<>(inventoryLabels);
+        list.setPrefSize(170, 90);
+        list.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
+        });
+        ui.add(list,0,3);
+    }
+
+    public void setUpCombatLogs() {
+        Label combat = new Label("Combat Logs: ");
+        ui.add(combat, 0, 4);
+        combat.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        ui.add(combatingLabel, 0, 5);
+    }
+
+    public void startEnemyMovement() {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
     }
 
     public void endGame() throws Exception {
@@ -131,8 +168,7 @@ public class Main extends Application {
 
 
     private void restart() throws Exception {
-        mainStage.close();
-        start(new Stage());
+        setStage("/level1.txt");
     }
 
 
@@ -191,7 +227,19 @@ public class Main extends Application {
 
         }
         refresh();
+        if(map.getPlayer().isStairs()) {
+            setStage("/level2.txt");
+        }
         endGame();
+    }
+
+    public void setStage(String level) {
+        map = MapLoader.loadMap(level);
+        canvas = new Canvas(
+                map.getWidth() * Tiles.TILE_WIDTH,
+                map.getHeight() * Tiles.TILE_WIDTH);
+        context = canvas.getGraphicsContext2D();
+        bp.setCenter(canvas);
     }
 
     private void moveEnemies() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -249,7 +297,7 @@ public class Main extends Application {
         List<Actor> enemies = map.getPlayer().getCell().getAdjacentEnemies();
         StringBuilder status = new StringBuilder();
         for (Actor enemy : enemies){
-            status.append(enemy.getTileName()).append("- Health: ").append(enemy.getHealth()).append(" ").append("Power: ").append(enemy.getPower()).append("\n");
+            status.append(enemy.getTileName()).append(" HP: ").append(enemy.getHealth()).append(" ").append("Pwr: ").append(enemy.getPower()).append("\n");
         }
         combatingLabel.setText(""+status);
     }
