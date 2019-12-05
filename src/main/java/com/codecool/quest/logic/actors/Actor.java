@@ -97,6 +97,7 @@ public abstract class Actor implements Drawable {
         if(enemy.isDead()) enemy.die();
         else{
             this.setHealth((int) (this.getHealth() - enemy.getPower() * this.getResi()));
+            if(this instanceof Player) ((Player) this).damageEquipment();
         }
         if(this.isDead()) this.die();
 
