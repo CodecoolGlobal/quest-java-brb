@@ -5,8 +5,8 @@ import com.codecool.quest.logic.Cell;
 public class Monster extends Enemy{
     public Monster(Cell cell) {
         super(cell);
-        setHealth(7);
-        setPower(5);
+        setHealth(35);
+        setPower(25);
     }
 
     @Override

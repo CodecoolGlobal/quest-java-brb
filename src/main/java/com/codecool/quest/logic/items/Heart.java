@@ -10,7 +10,7 @@ public class Heart extends Item {
 
     @Override
     public void pickedUp(Player player) {
-        player.setHealth(player.getHealth() + 2);
+        player.setHealth(player.getHealth() + 10);
     }
 
     @Override

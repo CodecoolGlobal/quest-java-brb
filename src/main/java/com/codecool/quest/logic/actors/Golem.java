@@ -6,8 +6,8 @@ public class Golem extends Enemy{
 
     public Golem(Cell cell) {
         super(cell);
-        setHealth(100);
-        setPower(15);
+        setHealth(200);
+        setPower(50);
     }
 
     @Override

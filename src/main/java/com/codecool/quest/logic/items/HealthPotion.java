@@ -5,7 +5,7 @@ import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.actors.Player;
 
 public class HealthPotion extends Consumable{
-    private int healPower = 3;
+    private int healPower = 25;
 
     public HealthPotion(Cell cell) {
         super(cell);

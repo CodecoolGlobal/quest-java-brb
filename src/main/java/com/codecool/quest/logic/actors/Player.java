@@ -87,9 +87,9 @@ public class Player extends Actor {
 
     public Player(Cell cell) {
         super(cell);
-        setPower(10);
-        setMaxHealth(200);
-        setBasePower(2);
+        setMaxHealth(75);
+        setBasePower(10);
+        setPower(getBasePower());
         setHealth(getMaxHealth());
     }
 

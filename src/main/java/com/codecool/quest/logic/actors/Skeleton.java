@@ -5,8 +5,8 @@ import com.codecool.quest.logic.Cell;
 public class Skeleton extends Enemy {
     public Skeleton(Cell cell) {
         super(cell);
-        setHealth(50);
-        setPower(20);
+        setHealth(40);
+        setPower(10);
     }
 
     @Override
