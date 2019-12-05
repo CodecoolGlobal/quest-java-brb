@@ -87,10 +87,14 @@ public class Main extends Application {
         setUpInventory();
         setUpCombatLogs();
         ui.add(helmetDurability,0,7);
+        helmetDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(shieldDurability,0,8);
+        shieldDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(weaponDurability, 0, 6);
+        weaponDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         ui.add(new Label("Defense: "), 0, 2);
         ui.add(defenseLabel, 1, 2);
+        defenseLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         BorderPane borderPane = new BorderPane();
         bp = borderPane;
         borderPane.setCenter(canvas);
