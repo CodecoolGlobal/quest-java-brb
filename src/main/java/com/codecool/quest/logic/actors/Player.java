@@ -1,14 +1,80 @@
 package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
-import com.codecool.quest.logic.CellType;
-import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.items.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Actor {
+
+    private Armory weapon;
+    private Armory helmet;
+    private Armory shield;
+    private Armory boots;
+    private Armory gloves;
+    private Armory plate;
+
+    public boolean isArmored() {
+        return getShield() != null || getBoots() != null || getGloves() != null || getPlate() != null || getHelmet() != null;
+    }
+
+    public boolean isWeaponed() {
+        return getWeapon() != null;
+    }
+
+    public void damageEquipment(){
+        if(getHelmet() != null) getHelmet().loseDurability();
+        if(getShield() != null) getShield().loseDurability();
+    }
+
+    public Armory getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Armory weapon) {
+        this.weapon = weapon;
+    }
+
+    public Armory getHelmet() {
+        return helmet;
+    }
+
+    public void setHelmet(Armory helmet) {
+        this.helmet = helmet;
+    }
+
+    public Armory getShield() {
+        return shield;
+    }
+
+    public void setShield(Armory shield) {
+        this.shield = shield;
+    }
+
+    public Armory getBoots() {
+        return boots;
+    }
+
+    public void setBoots(Armory boots) {
+        this.boots = boots;
+    }
+
+    public Armory getGloves() {
+        return gloves;
+    }
+
+    public void setGloves(Armory gloves) {
+        this.gloves = gloves;
+    }
+
+    public Armory getPlate() {
+        return plate;
+    }
+
+    public void setPlate(Armory plate) {
+        this.plate = plate;
+    }
+
     public List<Consumable> getInventory() {
         return inventory;
     }
@@ -29,7 +95,7 @@ public class Player extends Actor {
     }
 
     public String getTileName() {
-        return tileName;
+        return isWeaponed() && isArmored() ? "fullSetPlayer" : isWeaponed() ? "weaponedPlayer" : isArmored() ? "armoredPlayer" : "player";
     }
 
     public void setTileName(String tileName) {
@@ -52,7 +118,6 @@ public class Player extends Actor {
     }
 
     public void removeFromInventory(Item item){
-
         this.inventory.removeIf(deleteItem -> deleteItem.hashCode() == item.hashCode());
     }
 

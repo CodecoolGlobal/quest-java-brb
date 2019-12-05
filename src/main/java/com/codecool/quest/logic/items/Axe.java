@@ -6,8 +6,10 @@ public class Axe extends Weapon{
     public Axe(Cell cell) {
         super(cell);
         setPower(4);
-        setDurability(5);
+        setMaxDurability(3);
+        setDurability(getMaxDurability());
     }
+
 
     @Override
     public String getTileName() {

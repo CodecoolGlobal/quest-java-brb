@@ -6,7 +6,8 @@ public class Sword extends Weapon{
     public Sword(Cell cell) {
         super(cell);
         setPower(2);
-        setDurability(10);
+        setMaxDurability(4);
+        setDurability(getMaxDurability());
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.items.HealthPotion;
 import com.codecool.quest.logic.items.Item;
 import com.codecool.quest.logic.items.Key;
+import java.lang.Math;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -30,7 +31,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.stage.StageStyle;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +42,16 @@ public class Main extends Application {
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
+
     Label healthLabel = new Label();
     Label combatingLabel = new Label();
     Label powerLabel = new Label();
     ListView<String> list;
     Stage mainStage;
+    Label weaponDurability = new Label();
+    Label helmetDurability = new Label();
+    Label shieldDurability = new Label();
+    Label defenseLabel = new Label();
 
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("key", Key.class);
@@ -63,6 +68,7 @@ public class Main extends Application {
     );
 
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
+
 
     public static void main(String[] args) {
         launch(args);
@@ -83,16 +89,29 @@ public class Main extends Application {
         ui.add(new Label("Power: "), 0, 1);
         ui.add(powerLabel, 1, 1);
 
+        ui.add(new Label("Defense: "), 0, 3);
+        ui.add(defenseLabel, 1, 3);
+
         list = new ListView<>(inventoryLabels);
-        ui.add(new Label("Inventory: "), 0, 2);
+        ui.add(new Label("Inventory: "), 0, 4);
         list.setPrefSize(170, 90);
         list.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
-        ui.add(list, 0, 3);
+        ui.add(list, 0, 5);
 
-        ui.add(new Label("Combat: "), 0, 4);
-        ui.add(combatingLabel, 0, 5);
+
+        ui.add(helmetDurability,0,7);
+
+        ui.add(shieldDurability,0,8);
+
+        ui.add(new Label("Combat: "), 0, 10);
+        ui.add(combatingLabel, 0, 11);
+
+
+        ui.add(weaponDurability, 0, 6);
+
+
 
         BorderPane borderPane = new BorderPane();
 
@@ -124,7 +143,6 @@ public class Main extends Application {
     }
 
     private void itemUsed() {
-        // Kell Valami ami az item nevéből vissza adja a megfelelo Classt hozza
         map.getPlayer().useItem(itemTypes.get(list.getSelectionModel().getSelectedItem()));
         refresh();
     }
@@ -235,10 +253,7 @@ public class Main extends Application {
                 }
             }
         }
-        healthLabel.setText("" + map.getPlayer().getHealth());
-        powerLabel.setText("" + map.getPlayer().getPower());
-        updateNearbyEnemies();
-        updateInventory();
+        updateUI();
     }
 
     private void updateNearbyEnemies() {
@@ -248,5 +263,37 @@ public class Main extends Application {
             status.append(enemy.getTileName()).append("- Health: ").append(enemy.getHealth()).append(" ").append("Power: ").append(enemy.getPower()).append("\n");
         }
         combatingLabel.setText("" + status);
+    }
+
+    private void updateDurabilites(){
+        try{
+            weaponDurability.setText("Weapon Durability: "+ map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
+        }
+        catch (Exception e){
+            weaponDurability.setText("No weapon");
+        }
+        try{
+            helmetDurability.setText("Helmet Durability: "+ map.getPlayer().getHelmet().getMaxDurability() + "/" + map.getPlayer().getHelmet().getDurability());
+        }
+        catch (Exception e){
+            helmetDurability.setText("No helmet");
+        }
+        try{
+            shieldDurability.setText("Shield Durability: "+ map.getPlayer().getShield().getMaxDurability() + "/" + map.getPlayer().getShield().getDurability());
+        }
+        catch (Exception e){
+            shieldDurability.setText("No shield");
+        }
+    }
+    private void updateLabels(){
+        healthLabel.setText("" + map.getPlayer().getHealth());
+        powerLabel.setText("" + map.getPlayer().getPower());
+        defenseLabel.setText("" + Math.round(map.getPlayer().getResi() * 100));
+    }
+    private void updateUI(){
+        updateLabels();
+        updateDurabilites();
+        updateNearbyEnemies();
+        updateInventory();
     }
 }

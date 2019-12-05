@@ -5,6 +5,9 @@ import java.util.Random;
 public enum ItemTypes {
     HEALTHPOTION(HealthPotion.class),
     HEART(Heart.class),
+    SWORD(Sword.class),
+    HELMET(Helmet.class),
+    SHIELD(Shield.class),
     AXE(Axe.class);
 
 

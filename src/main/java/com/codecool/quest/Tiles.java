@@ -29,10 +29,14 @@ public class Tiles {
         tileMap.put("floor", new Tile(2, 0));
         tileMap.put("player", new Tile(25, 0));
         tileMap.put("weaponedPlayer", new Tile(26, 0));
+        tileMap.put("armoredPlayer", new Tile(30, 0));
+        tileMap.put("fullSetPlayer", new Tile(29, 0));
         tileMap.put("skeleton", new Tile(29, 6));
         tileMap.put("monster", new Tile(28, 6));
         tileMap.put("sword", new Tile(4, 28));
         tileMap.put("axe", new Tile(10, 30));
+        tileMap.put("shield", new Tile(8,26));
+        tileMap.put("helmet", new Tile(2,22));
         tileMap.put("closeddoor", new Tile(3, 3));
         tileMap.put("opendoor", new Tile(4, 3));
         tileMap.put("key", new Tile(16, 23));
