@@ -17,7 +17,7 @@ public abstract class Actor implements Drawable {
     }
     private Cell cell;
     private int health;
-    private double resi = getBaseResi()-getResi();
+    private double resi;
     private double baseResi = 1;
 
     public double getBaseResi() {

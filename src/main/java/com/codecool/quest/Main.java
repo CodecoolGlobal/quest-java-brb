@@ -58,8 +58,8 @@ public class Main extends Application {
     Label shieldDurability = new Label();
     Label defenseLabel = new Label();
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
-        put("key", Key.class);
-        put("healthPotion", HealthPotion.class);
+        put("KEY", Key.class);
+        put("HEALTHPOTION", HealthPotion.class);
     }};
     Timeline timeline = new Timeline(
             new KeyFrame(Duration.seconds(1), e -> {
@@ -227,7 +227,7 @@ public class Main extends Application {
     private void updateInventory() {
         inventoryLabels.clear();
         for (Item item : map.getPlayer().getInventory()) {
-            inventoryLabels.add(item.getTileName());
+            inventoryLabels.add(item.getTileName().toUpperCase());
         }
     }
 
@@ -314,7 +314,7 @@ public class Main extends Application {
         List<Actor> enemies = map.getPlayer().getCell().getAdjacentEnemies();
         StringBuilder status = new StringBuilder();
         for (Actor enemy : enemies){
-            status.append(enemy.getTileName()).append(":\n").append("   HP: ").append(enemy.getHealth()).append("\n").append("   Attack: ").append(enemy.getPower()).append("\n");
+            status.append(enemy.getTileName().toUpperCase()).append(":\n").append("   HP: ").append(enemy.getHealth()).append("\n").append("   Attack: ").append(enemy.getPower()).append("\n");
         }
         combatingLabel.setText("" + status);
     }
@@ -341,7 +341,7 @@ public class Main extends Application {
     private void updateLabels(){
         healthLabel.setText("" + map.getPlayer().getHealth() +"/"+map.getPlayer().getMaxHealth());
         powerLabel.setText("" + map.getPlayer().getPower());
-        defenseLabel.setText("" + Math.round(map.getPlayer().getResi() * 100));
+        defenseLabel.setText("" + (100-Math.round(map.getPlayer().getResi() * 100)));
     }
     private void updateUI(){
         updateLabels();

@@ -21,8 +21,8 @@ public class Shield extends Armor {
     @Override
     public void pickedUp(Player player) {
         this.setPlayer(player);
-        if (player.getShield() != null) player.setResi(player.getResi()-player.getShield().getResi()+this.getResi());
-        else player.setResi(player.getResi()+this.getResi());
+        if (player.getShield() != null) player.setResi(player.getResi()+player.getShield().getResi()-this.getResi());
+        else player.setResi(player.getResi()-this.getResi());
         player.setShield(this);
     }
 

@@ -21,8 +21,8 @@ public class Helmet extends Armor {
     @Override
     public void pickedUp(Player player) {
         this.setPlayer(player);
-        if(player.getHelmet() != null) player.setResi(player.getResi()-player.getHelmet().getResi()+this.getResi());
-        else player.setResi(player.getResi()+this.getResi());
+        if(player.getHelmet() != null) player.setResi(player.getResi()+player.getHelmet().getResi()-this.getResi());
+        else player.setResi(player.getResi()-this.getResi());
         player.setHelmet(this);
     }
 
