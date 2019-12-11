@@ -62,13 +62,7 @@ public class Main extends Application {
         put("HEALTHPOTION", HealthPotion.class);
     }};
     Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(1), e -> {
-                try {
-                    moveEnemies();
-                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
-                    ex.printStackTrace();
-                }
-            })
+            new KeyFrame(Duration.seconds(1), e -> moveEnemies())
     );
 
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
@@ -89,20 +83,22 @@ public class Main extends Application {
         ui.setVgap(3);
 
         Label dura = new Label("Durability:");
+
         ui.add(dura,0,5);
-        dura.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(dura,15);
         ui.add(helmetDurability,0,7);
-        helmetDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
+        setLabelStyle(helmetDurability,14);
         ui.add(shieldDurability,0,8);
-        shieldDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
+        setLabelStyle(shieldDurability,14);
         ui.add(weaponDurability, 0, 6);
-        weaponDurability.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 14));
+        setLabelStyle(weaponDurability,14);
+
         Label defense = new Label("Defense: ");
         ui.add(defense, 0, 2);
-        defense.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(defense,15);
         defense.setTextFill(Color.PURPLE);
         ui.add(defenseLabel, 1, 2);
-        defenseLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(defenseLabel,15);
         defenseLabel.setTextFill(Color.PURPLE);
         defenseLabel.setEffect(new Glow(0.5));
         BorderPane borderPane = new BorderPane();
@@ -114,13 +110,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         mainStage = primaryStage;
         refresh();
-        scene.setOnKeyPressed(keyEvent -> {
-            try {
-                onKeyPressed(keyEvent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        scene.setOnKeyPressed(this::onKeyPressed);
 
         primaryStage.setTitle("Codecool Quest");
         primaryStage.show();
@@ -132,24 +122,30 @@ public class Main extends Application {
         ui.setPadding(new Insets(10));
     }
 
+
+
     public void setUpHealth() {
         Label hp = new Label("Health:");
         ui.add(hp, 0, 0);
-        hp.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(hp,15);
         hp.setTextFill(Color.GREEN);
         ui.add(healthLabel, 1, 0);
-        healthLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(healthLabel,15);
         healthLabel.setTextFill(Color.GREEN);
         healthLabel.setEffect(new Glow(0.5));
+    }
+
+    public void setLabelStyle(Label label,int fontSize){
+        label.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, fontSize));
     }
 
     public void setUpPower() {
         Label pwr = new Label("Attack:");
         ui.add(pwr, 0, 1);
-        pwr.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(pwr,15);
         pwr.setTextFill(Color.RED);
         ui.add(powerLabel, 1, 1);
-        powerLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(powerLabel,15);
         powerLabel.setTextFill(Color.RED);
         powerLabel.setEffect(new Glow(0.5));
     }
@@ -157,7 +153,7 @@ public class Main extends Application {
     public void setUpInventory() {
         Label inventory = new Label("Inventory:");
         ui.add(inventory, 0, 3);
-        inventory.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(inventory,15);
         inventory.setTextFill((Color.SLATEBLUE));
         list = new ListView<>(inventoryLabels);
         list.setPrefSize(170, 90);
@@ -170,10 +166,9 @@ public class Main extends Application {
     public void setUpCombatLogs() {
         Label combat = new Label("Nearby Enemies: ");
         ui.add(combat, 0, 14);
-        combat.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        setLabelStyle(combat,15);
         ui.add(combatingLabel, 0, 15);
-        combatingLabel.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 13));
-
+        setLabelStyle(combatingLabel,13);
     }
 
     public void startEnemyMovement() {
@@ -181,7 +176,7 @@ public class Main extends Application {
         timeline.play();
     }
 
-    public void endGame() throws Exception {
+    public void endGame(){
         if (isGameOver()) showAlert();
     }
 
@@ -191,7 +186,7 @@ public class Main extends Application {
     }
 
 
-    private void restart() throws Exception {
+    private void restart() {
         setStage("/level1.txt");
     }
 
@@ -200,7 +195,7 @@ public class Main extends Application {
         return map.getPlayer().isDead();
     }
 
-    private void showAlert() throws Exception {
+    private void showAlert() {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Game Over");
@@ -231,7 +226,7 @@ public class Main extends Application {
         }
     }
 
-    private void onKeyPressed(KeyEvent keyEvent) throws Exception {
+    private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case W:
                 map.getPlayer().move(0, -1);
@@ -265,7 +260,7 @@ public class Main extends Application {
         bp.setCenter(canvas);
     }
 
-    private void moveEnemies() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    private void moveEnemies() {
         for (Actor enemy : map.getAllEnemies()) {
             double random = Tiles.getRandomIntegerBetweenRange(0, 5);
             int value = (int) random;

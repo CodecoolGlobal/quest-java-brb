@@ -10,9 +10,12 @@ public abstract class Enemy extends Actor{
         super(cell);
     }
 
-    public void dropLoot() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class randomItem = ItemTypes.getRandomItem();
-        randomItem.getConstructor(Cell.class).newInstance(this.getCell());
+    public void dropLoot(){
+        try {
+            ItemTypes.getRandomItem().getConstructor(Cell.class).newInstance(this.getCell());
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            System.err.println("Couldnt create loot: "+e.getMessage());
+        }
     }
 
 

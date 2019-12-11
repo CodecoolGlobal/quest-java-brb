@@ -72,7 +72,7 @@ public abstract class Actor implements Drawable {
         this.setResi(getBaseResi());
     }
 
-    public void move(int dx, int dy) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (this instanceof Player && nextCell.getActor() instanceof Enemy ){
             this.attack(nextCell);
@@ -91,7 +91,7 @@ public abstract class Actor implements Drawable {
         }
     }
 
-    public void attack(Cell cell) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public void attack(Cell cell){
         Actor enemy = cell.getActor();
         enemy.setHealth((int) (enemy.getHealth() - this.getPower() * enemy.getResi()));
         if(enemy.isDead()) enemy.die();
@@ -124,7 +124,7 @@ public abstract class Actor implements Drawable {
         return this.health <= 0;
     }
 
-    public void die() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void die() {
         this.getCell().setActor(null);
         if(this instanceof Enemy) ((Enemy) this).dropLoot();
 

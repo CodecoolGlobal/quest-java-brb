@@ -38,16 +38,16 @@ public class Player extends Actor {
         return helmet;
     }
 
-    public void setHelmet(Helmet helmet) {
-        this.helmet = helmet;
+    public void setHelmet(Armor helmet) {
+        this.helmet = (Helmet) helmet;
     }
 
     public Shield getShield() {
         return shield;
     }
 
-    public void setShield(Shield shield) {
-        this.shield = shield;
+    public void setShield(Armor shield) {
+        this.shield = (Shield) shield;
     }
 
     public Armory getBoots() {
