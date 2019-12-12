@@ -3,7 +3,7 @@ package com.codecool.quest;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.GameMap;
 import com.codecool.quest.logic.MapLoader;
-import com.codecool.quest.logic.actors.Actor;
+import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.HealthPotion;
 import com.codecool.quest.logic.items.Item;
 import com.codecool.quest.logic.items.Key;
@@ -53,12 +53,10 @@ public class Main extends Application {
         return map;
     }
 
-    GameMap map = MapLoader.loadMap("/level1.txt");
-    Canvas canvas = new Canvas(
-            map.getWidth() * Tiles.TILE_WIDTH,
-            map.getHeight() * Tiles.TILE_WIDTH);
-    GraphicsContext context = canvas.getGraphicsContext2D();
-
+    GameMap map;
+    Canvas canvas;
+    GraphicsContext context;
+    Class playerCast;
     Label healthLabel = new Label();
     Label combatingLabel = new Label();
     Label powerLabel = new Label();
@@ -90,8 +88,13 @@ public class Main extends Application {
         setUpCharacterSelect(primaryStage);
     }
 
-    public void setUpMain(Stage primaryStage){
-
+    public void setUpMain(Stage primaryStage, Class choosenCast){
+        playerCast = choosenCast;
+        map = MapLoader.loadMap("/level1.txt",choosenCast);
+        canvas =  new Canvas(
+                map.getWidth() * Tiles.TILE_WIDTH,
+                map.getHeight() * Tiles.TILE_WIDTH);
+        context = canvas.getGraphicsContext2D();
         setUpWindow();
         setUpHealth();
         setUpPower();
@@ -145,19 +148,19 @@ public class Main extends Application {
         Button cast1 = new Button("Warrior");
         cast1.setPadding(new Insets(250,100,250,100));
         cast1.setBackground(Background.EMPTY);
-        cast1.setOnAction(e -> setUpMain(primaryStage));
+        cast1.setOnAction(e -> setUpMain(primaryStage,Warrior.class));
 
 
         Button cast2 = new Button("Rouge");
         cast2.setPadding(new Insets(250,100,250,100));
         cast2.setBackground(Background.EMPTY);
-        cast2.setOnAction(e -> setUpMain(primaryStage));
+        cast2.setOnAction(e -> setUpMain(primaryStage, Rouge.class));
 
         Button cast3 = new Button("Mage");
         cast3.setBackground(Background.EMPTY);
         cast3.setPadding(new Insets(250,100,250,100));
 
-        cast3.setOnAction(e -> setUpMain(primaryStage));
+        cast3.setOnAction(e -> setUpMain(primaryStage, Mage.class));
 
         // Create the HBox
         HBox buttonBox = new HBox();
@@ -327,7 +330,7 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
-        map = MapLoader.loadMap(level);
+        map = MapLoader.loadMap(level,playerCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);

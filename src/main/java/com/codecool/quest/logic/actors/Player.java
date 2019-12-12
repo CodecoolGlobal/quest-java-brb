@@ -87,10 +87,7 @@ public class Player extends Actor {
 
     public Player(Cell cell) {
         super(cell);
-        setMaxHealth(75);
-        setBasePower(10);
-        setPower(getBasePower());
-        setHealth(getMaxHealth());
+
     }
 
     public String getTileName() {

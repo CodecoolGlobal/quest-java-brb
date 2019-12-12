@@ -9,10 +9,11 @@ import com.codecool.quest.logic.actors.Banshee;
 import com.codecool.quest.logic.items.*;
 
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap(String file) {
+    public static GameMap loadMap(String file,Class choosenCast) {
         InputStream is = MapLoader.class.getResourceAsStream(file);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
@@ -54,7 +55,11 @@ public class MapLoader {
                          // actors
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
+                            try {
+                                map.setPlayer((Player) choosenCast.getConstructor(Cell.class).newInstance(cell));
+                            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                                e.printStackTrace();
+                            }
                             break;
                         case 'S':
                             cell.setType(CellType.FLOOR);
