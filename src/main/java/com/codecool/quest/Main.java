@@ -7,21 +7,32 @@ import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.items.HealthPotion;
 import com.codecool.quest.logic.items.Item;
 import com.codecool.quest.logic.items.Key;
+
+import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.lang.Math;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,12 +41,14 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.stage.StageStyle;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class Main extends Application {
+
     public GameMap getMap() {
         return map;
     }
@@ -74,6 +87,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        setUpCharacterSelect(primaryStage);
+    }
+
+    public void setUpMain(Stage primaryStage){
+
         setUpWindow();
         setUpHealth();
         setUpPower();
@@ -84,21 +102,21 @@ public class Main extends Application {
 
         Label dura = new Label("Durability:");
 
-        ui.add(dura,0,5);
-        setLabelStyle(dura,15);
-        ui.add(helmetDurability,0,7);
-        setLabelStyle(helmetDurability,14);
-        ui.add(shieldDurability,0,8);
-        setLabelStyle(shieldDurability,14);
+        ui.add(dura, 0, 5);
+        setLabelStyle(dura, 15);
+        ui.add(helmetDurability, 0, 7);
+        setLabelStyle(helmetDurability, 14);
+        ui.add(shieldDurability, 0, 8);
+        setLabelStyle(shieldDurability, 14);
         ui.add(weaponDurability, 0, 6);
-        setLabelStyle(weaponDurability,14);
+        setLabelStyle(weaponDurability, 14);
 
         Label defense = new Label("Defense: ");
         ui.add(defense, 0, 2);
-        setLabelStyle(defense,15);
+        setLabelStyle(defense, 15);
         defense.setTextFill(Color.PURPLE);
         ui.add(defenseLabel, 1, 2);
-        setLabelStyle(defenseLabel,15);
+        setLabelStyle(defenseLabel, 15);
         defenseLabel.setTextFill(Color.PURPLE);
         defenseLabel.setEffect(new Glow(0.5));
         BorderPane borderPane = new BorderPane();
@@ -122,30 +140,87 @@ public class Main extends Application {
         ui.setPadding(new Insets(10));
     }
 
+    public void setUpCharacterSelect(Stage primaryStage) {
 
+        Button cast1 = new Button("Warrior");
+        cast1.setPadding(new Insets(250,100,250,100));
+        cast1.setBackground(Background.EMPTY);
+        cast1.setOnAction(e -> setUpMain(primaryStage));
+
+
+        Button cast2 = new Button("Rouge");
+        cast2.setPadding(new Insets(250,100,250,100));
+        cast2.setBackground(Background.EMPTY);
+        cast2.setOnAction(e -> setUpMain(primaryStage));
+
+        Button cast3 = new Button("Mage");
+        cast3.setBackground(Background.EMPTY);
+        cast3.setPadding(new Insets(250,100,250,100));
+
+        cast3.setOnAction(e -> setUpMain(primaryStage));
+
+        // Create the HBox
+        HBox buttonBox = new HBox();
+        buttonBox.setPadding(new Insets(0,25,0,25));
+        // Add the children to the HBox
+        buttonBox.getChildren().addAll(cast1, cast2, cast3);
+        // Set the vertical spacing between children to 15px
+        buttonBox.setSpacing(0);
+
+        // Create the VBox
+        VBox root = new VBox();
+        FileInputStream file = null;
+        try {
+            file = new FileInputStream("/home/adrian/codecool/oop/quest-java-brb/src/main/resources/castselect.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BackgroundImage myBI= new BackgroundImage(new Image(file),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        root.setBackground(new Background(myBI));
+        // Add the children to the VBox
+        root.getChildren().addAll(buttonBox);
+        // Set the vertical spacing between children to X
+        root.setSpacing(0);
+        // Set the Size of the VBox
+        root.setMinSize(800, 600);
+
+
+
+        // Create the Scene
+        Scene scene = new Scene(root);
+        // Add the scene to the Stage
+        primaryStage.setScene(scene);
+        // Set the title of the Stage
+        primaryStage.setTitle("Character Select");
+        // Display the Stage
+        primaryStage.show();
+
+    }
 
     public void setUpHealth() {
         Label hp = new Label("Health:");
         ui.add(hp, 0, 0);
-        setLabelStyle(hp,15);
+        setLabelStyle(hp, 15);
         hp.setTextFill(Color.GREEN);
         ui.add(healthLabel, 1, 0);
-        setLabelStyle(healthLabel,15);
+        setLabelStyle(healthLabel, 15);
         healthLabel.setTextFill(Color.GREEN);
         healthLabel.setEffect(new Glow(0.5));
     }
 
-    public void setLabelStyle(Label label,int fontSize){
+    public void setLabelStyle(Label label, int fontSize) {
         label.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, fontSize));
     }
 
     public void setUpPower() {
         Label pwr = new Label("Attack:");
         ui.add(pwr, 0, 1);
-        setLabelStyle(pwr,15);
+        setLabelStyle(pwr, 15);
         pwr.setTextFill(Color.RED);
         ui.add(powerLabel, 1, 1);
-        setLabelStyle(powerLabel,15);
+        setLabelStyle(powerLabel, 15);
         powerLabel.setTextFill(Color.RED);
         powerLabel.setEffect(new Glow(0.5));
     }
@@ -153,22 +228,22 @@ public class Main extends Application {
     public void setUpInventory() {
         Label inventory = new Label("Inventory:");
         ui.add(inventory, 0, 3);
-        setLabelStyle(inventory,15);
+        setLabelStyle(inventory, 15);
         inventory.setTextFill((Color.SLATEBLUE));
         list = new ListView<>(inventoryLabels);
         list.setPrefSize(170, 90);
         list.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
-        ui.add(list,0,4);
+        ui.add(list, 0, 4);
     }
 
     public void setUpCombatLogs() {
         Label combat = new Label("Nearby Enemies: ");
         ui.add(combat, 0, 14);
-        setLabelStyle(combat,15);
+        setLabelStyle(combat, 15);
         ui.add(combatingLabel, 0, 15);
-        setLabelStyle(combatingLabel,13);
+        setLabelStyle(combatingLabel, 13);
     }
 
     public void startEnemyMovement() {
@@ -176,7 +251,7 @@ public class Main extends Application {
         timeline.play();
     }
 
-    public void endGame(){
+    public void endGame() {
         if (isGameOver()) showAlert();
     }
 
@@ -245,7 +320,7 @@ public class Main extends Application {
                 break;
         }
         refresh();
-        if(map.getPlayer().isStairs()) {
+        if (map.getPlayer().isStairs()) {
             setStage("/level2.txt");
         }
         endGame();
@@ -308,37 +383,37 @@ public class Main extends Application {
     private void updateNearbyEnemies() {
         List<Actor> enemies = map.getPlayer().getCell().getAdjacentEnemies();
         StringBuilder status = new StringBuilder();
-        for (Actor enemy : enemies){
+        for (Actor enemy : enemies) {
             status.append(enemy.getTileName().toUpperCase()).append(":\n").append("   HP: ").append(enemy.getHealth()).append("\n").append("   Attack: ").append(enemy.getPower()).append("\n");
         }
         combatingLabel.setText("" + status);
     }
-    private void updateDurabilites(){
-        try{
-            weaponDurability.setText("  Weapon: "+ map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
-        }
-        catch (Exception e){
+
+    private void updateDurabilites() {
+        try {
+            weaponDurability.setText("  Weapon: " + map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
+        } catch (Exception e) {
             weaponDurability.setText("  No weapon");
         }
-        try{
-            helmetDurability.setText("  Helmet: "+ map.getPlayer().getHelmet().getMaxDurability() + "/" + map.getPlayer().getHelmet().getDurability());
-        }
-        catch (Exception e){
+        try {
+            helmetDurability.setText("  Helmet: " + map.getPlayer().getHelmet().getMaxDurability() + "/" + map.getPlayer().getHelmet().getDurability());
+        } catch (Exception e) {
             helmetDurability.setText("  No helmet");
         }
-        try{
-            shieldDurability.setText("  Shield: "+ map.getPlayer().getShield().getMaxDurability() + "/" + map.getPlayer().getShield().getDurability());
-        }
-        catch (Exception e){
+        try {
+            shieldDurability.setText("  Shield: " + map.getPlayer().getShield().getMaxDurability() + "/" + map.getPlayer().getShield().getDurability());
+        } catch (Exception e) {
             shieldDurability.setText("  No shield");
         }
     }
-    private void updateLabels(){
-        healthLabel.setText("" + map.getPlayer().getHealth() +"/"+map.getPlayer().getMaxHealth());
+
+    private void updateLabels() {
+        healthLabel.setText("" + map.getPlayer().getHealth() + "/" + map.getPlayer().getMaxHealth());
         powerLabel.setText("" + map.getPlayer().getPower());
-        defenseLabel.setText("" + (100-Math.round(map.getPlayer().getResi() * 100)));
+        defenseLabel.setText("" + (100 - Math.round(map.getPlayer().getResi() * 100)));
     }
-    private void updateUI(){
+
+    private void updateUI() {
         updateLabels();
         updateDurabilites();
         updateNearbyEnemies();
