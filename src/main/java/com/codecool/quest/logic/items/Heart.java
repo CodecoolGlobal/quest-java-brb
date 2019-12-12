@@ -4,21 +4,16 @@ import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.actors.Player;
 
-public class Heart extends Item {
+public class Heart extends Item implements HealingItem{
     private int healPower = 30;
 
     public Heart(Cell cell) {
         super(cell);
     }
 
-    public void heal(Actor actor){
-        actor.setHealth(actor.getHealth()+this.healPower);
-        if(actor.getMaxHealth() < actor.getHealth()) actor.setHealth(actor.getMaxHealth());
-    }
-
     @Override
     public void pickedUp(Player player) {
-        this.heal(player);
+        this.heal(player,this.healPower);
         player.removeFromInventory(this);
     }
 
