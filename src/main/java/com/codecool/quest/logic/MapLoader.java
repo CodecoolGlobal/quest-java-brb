@@ -83,6 +83,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Key(cell);
                             break;
+                        case 'I':
+                            cell.setType(CellType.FLOOR);
+                            new Bow(cell);
+                            break;
                         case 'P':
                             cell.setType(CellType.FLOOR);
                             new HealthPotion(cell);

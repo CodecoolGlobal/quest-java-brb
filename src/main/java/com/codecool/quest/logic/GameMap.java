@@ -1,6 +1,8 @@
 package com.codecool.quest.logic;
 
 import com.codecool.quest.logic.actors.*;
+import com.codecool.quest.logic.items.Ammo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,16 @@ public class GameMap {
         return enemies;
     }
 
+
+    public List<Ammo> getAllAmmos(){
+        List<Ammo> ammos = new ArrayList<>();
+        for(int row = 0;row<width;row++){
+            for(int col = 0;col<height;col++){
+                if(getCell(row,col).getAmmo() != null) ammos.add(getCell(row,col).getAmmo());
+            }
+        }
+        return ammos;
+    }
 
     public Player getPlayer() {
         return player;

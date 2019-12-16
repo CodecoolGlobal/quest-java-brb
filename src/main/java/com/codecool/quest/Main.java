@@ -4,9 +4,7 @@ import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.GameMap;
 import com.codecool.quest.logic.MapLoader;
 import com.codecool.quest.logic.actors.*;
-import com.codecool.quest.logic.items.HealthPotion;
-import com.codecool.quest.logic.items.Item;
-import com.codecool.quest.logic.items.Key;
+import com.codecool.quest.logic.items.*;
 
 import java.awt.*;
 import java.io.FileInputStream;
@@ -49,6 +47,8 @@ import java.util.Optional;
 
 public class Main extends Application {
 
+    private boolean shooting;
+
     public GameMap getMap() {
         return map;
     }
@@ -73,8 +73,21 @@ public class Main extends Application {
         put("HEALTHPOTION", HealthPotion.class);
     }};
     Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(1), e -> moveEnemies())
+            new KeyFrame(Duration.seconds(1), e -> moveThings())
     );
+
+    private void moveThings() {
+        moveEnemies();
+        moveBullets();
+        refresh();
+    }
+
+    private void moveBullets() {
+        for (Ammo bullet: map.getAllAmmos()) {
+            bullet.moveBullet();
+        }
+
+    }
 
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
 
@@ -132,6 +145,7 @@ public class Main extends Application {
         mainStage = primaryStage;
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
+        scene.setOnKeyReleased(this::onKeyReleased);
 
         primaryStage.setTitle("Codecool Quest");
         primaryStage.show();
@@ -306,27 +320,46 @@ public class Main extends Application {
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
+            case SHIFT:
+                shooting = true;
+                break;
             case W:
-                map.getPlayer().move(0, -1);
+
+                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(0,-1),0,-1);
+                else map.getPlayer().move(0, -1);
                 break;
             case S:
-                map.getPlayer().move(0, 1);
+
+                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(0,1),0,1);
+                else map.getPlayer().move(0, 1);
                 break;
             case A:
-                map.getPlayer().move(-1, 0);
+
+                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(-1,0),-1,0);
+                else map.getPlayer().move(-1, 0);
                 break;
             case D:
-                map.getPlayer().move(1, 0);
+
+                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(1,0),1,0);
+                else map.getPlayer().move(1, 0);
+
                 break;
             case E:
                 map.getPlayer().pickUp();
                 break;
+
         }
         refresh();
         if (map.getPlayer().isStairs()) {
             setStage("/level2.txt");
         }
         endGame();
+    }
+
+    private void onKeyReleased(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.SHIFT) {
+            shooting = false;
+        }
     }
 
     public void setStage(String level) {
@@ -360,7 +393,6 @@ public class Main extends Application {
             }
         }
 
-        refresh();
     }
 
 
@@ -375,6 +407,8 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 } else if (cell.getItem() != null) {
                     Tiles.drawTile(context, cell.getItem(), x, y);
+                } else if (cell.getAmmo() != null) {
+                    Tiles.drawTile(context, cell.getAmmo(), x, y);
                 } else {
                     Tiles.drawTile(context, cell, x, y);
                 }

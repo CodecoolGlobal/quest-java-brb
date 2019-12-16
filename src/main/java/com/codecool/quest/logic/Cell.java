@@ -1,6 +1,7 @@
 package com.codecool.quest.logic;
 
 import com.codecool.quest.logic.actors.Actor;
+import com.codecool.quest.logic.items.Ammo;
 import com.codecool.quest.logic.items.Item;
 
 import java.lang.reflect.Array;
@@ -13,6 +14,7 @@ public class Cell implements Drawable {
     private GameMap gameMap;
     private Item item;
     private int x, y;
+    private Ammo ammo;
 
     public Item getItem() {
         return item;
@@ -73,6 +75,7 @@ public class Cell implements Drawable {
         }};
     }
 
+
     public void checkDoors(){
         for (Cell cell: getAllNeighbors()) {
             if(cell.getTileName().equals("closeddoor") || cell.getTileName().equals("opendoor")) cell.unlockDoor();
@@ -97,4 +100,11 @@ public class Cell implements Drawable {
     }
 
 
+    public void setAmmo(Ammo ammo) {
+        this.ammo = ammo;
+    }
+
+    public Ammo getAmmo() {
+        return ammo;
+    }
 }
