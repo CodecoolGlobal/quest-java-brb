@@ -1,8 +1,10 @@
 package com.codecool.quest;
 
 import com.codecool.quest.logic.Drawable;
+import com.codecool.quest.logic.items.Ammo;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.transform.Rotate;
 
 import java.util.*;
 
@@ -26,6 +28,7 @@ public class Tiles {
 
     static {
         tileMap.put("wall", new Tile(10, 17));
+        tileMap.put("arrow", new Tile(25, 17));
         tileMap.put("floor", new Tile(2, 0));
         tileMap.put("player", new Tile(25, 0));
         tileMap.put("weaponedPlayer", new Tile(27, 0));
@@ -34,6 +37,7 @@ public class Tiles {
         tileMap.put("skeleton", new Tile(29, 6));
         tileMap.put("monster", new Tile(28, 6));
         tileMap.put("sword", new Tile(4, 28));
+        tileMap.put("bow", new Tile(5, 28));
         tileMap.put("axe", new Tile(10, 30));
         tileMap.put("shield", new Tile(8,26));
         tileMap.put("helmet", new Tile(1,22));
@@ -50,6 +54,7 @@ public class Tiles {
         tileMap.put("wateredge", new Tile(9, 5));
     }
 
+
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
         Tile tile;
         if (d.getTileName().equals("greenery")) {
@@ -57,9 +62,17 @@ public class Tiles {
         } else {
             tile = tileMap.get(d.getTileName());
         }
+
+
+        if(d instanceof Ammo){
+            double angle = ((Ammo) d).getDirection();
+            context.save();
+            Rotate r = new Rotate(angle, x*TILE_WIDTH + TILE_WIDTH/2, y*TILE_WIDTH + TILE_WIDTH/2);
+            context.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+        }
         context.drawImage(tileset, tile.x, tile.y, tile.w, tile.h,
                 x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
-
+        context.restore();
     }
 
     public static double getRandomIntegerBetweenRange(double min, double max){
