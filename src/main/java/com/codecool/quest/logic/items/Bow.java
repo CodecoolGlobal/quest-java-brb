@@ -6,6 +6,9 @@ public class Bow extends RangedWeapon {
 
     public Bow(Cell cell) {
         super(cell,Arrow.class);
+        setPower(4);
+        setMaxDurability(4);
+        setDurability(getMaxDurability());
     }
 
     @Override

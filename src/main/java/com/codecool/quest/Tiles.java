@@ -11,7 +11,7 @@ import java.util.*;
 public class Tiles {
     public static int TILE_WIDTH = 32;
 
-    private static Image tileset = new Image("/tiles4.png", 543 * 2, 543 * 2, true, false);
+    private static Image tileset = new Image("/tiles5.png", 543 * 2, 543 * 2, true, false);
     private static Map<String, Tile> tileMap = new HashMap<>();
     public static ArrayList<Integer> greenery = new ArrayList<>();
     public static ListIterator<Integer> iterator = greenery.listIterator();
@@ -38,6 +38,7 @@ public class Tiles {
         tileMap.put("monster", new Tile(28, 6));
         tileMap.put("sword", new Tile(4, 28));
         tileMap.put("bow", new Tile(5, 28));
+        tileMap.put("crossbow", new Tile(7, 27));
         tileMap.put("axe", new Tile(10, 30));
         tileMap.put("shield", new Tile(8,26));
         tileMap.put("helmet", new Tile(1,22));
@@ -49,9 +50,13 @@ public class Tiles {
         tileMap.put("torch", new Tile(4, 15));
         tileMap.put("healthPotion", new Tile(17, 25));
         tileMap.put("laserpistol", new Tile (6, 31));
+        tileMap.put("laser", new Tile (15, 10));
         tileMap.put("golem", new Tile(30, 6));
         tileMap.put("banshee", new Tile(27, 6));
         tileMap.put("wateredge", new Tile(9, 5));
+        tileMap.put("hurtskeleton", new Tile(24, 8));
+        tileMap.put("hurtmonster", new Tile(25, 8));
+        tileMap.put("hurtbanshee", new Tile(26, 8));
     }
 
 

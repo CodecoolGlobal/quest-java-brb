@@ -31,6 +31,8 @@ public class GameMap {
         return cells[x][y];
     }
 
+
+
     public List<Actor> getAllEnemies(){
         List<Actor> enemies = new ArrayList<>();
         for(int row = 0;row<width;row++){

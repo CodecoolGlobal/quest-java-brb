@@ -2,6 +2,8 @@ package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.logic.Cell;
 
+import java.util.function.Function;
+
 public class Warrior extends Player{
     public Warrior(Cell cell) {
         super(cell);
@@ -10,6 +12,5 @@ public class Warrior extends Player{
         setPower(getBasePower());
         setHealth(getMaxHealth());
     }
-
 
 }

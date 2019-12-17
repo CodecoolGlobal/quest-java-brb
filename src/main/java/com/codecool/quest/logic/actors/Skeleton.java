@@ -7,10 +7,11 @@ public class Skeleton extends Enemy {
         super(cell);
         setHealth(40);
         setPower(10);
+        setTileName("skeleton");
     }
 
     @Override
     public String getTileName() {
-        return "skeleton";
+        return tileName;
     }
 }
