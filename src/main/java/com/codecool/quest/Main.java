@@ -100,10 +100,10 @@ public class Main extends Application {
         setUpCharacterSelect(primaryStage);
     }
 
-    public void setUpMain(Stage primaryStage, Class choosenCast){
+    public void setUpMain(Stage primaryStage, Class choosenCast) {
         playerCast = choosenCast;
-        map = MapLoader.loadMap("/level1.txt",choosenCast);
-        canvas =  new Canvas(
+        map = MapLoader.loadMap("/level1.txt", choosenCast);
+        canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
@@ -159,25 +159,25 @@ public class Main extends Application {
     public void setUpCharacterSelect(Stage primaryStage) {
 
         Button cast1 = new Button("Warrior");
-        cast1.setPadding(new Insets(250,100,250,100));
+        cast1.setPadding(new Insets(250, 100, 250, 100));
         cast1.setBackground(Background.EMPTY);
-        cast1.setOnAction(e -> setUpMain(primaryStage,Warrior.class));
+        cast1.setOnAction(e -> setUpMain(primaryStage, Warrior.class));
 
 
         Button cast2 = new Button("Rouge");
-        cast2.setPadding(new Insets(250,100,250,100));
+        cast2.setPadding(new Insets(250, 100, 250, 100));
         cast2.setBackground(Background.EMPTY);
         cast2.setOnAction(e -> setUpMain(primaryStage, Rouge.class));
 
         Button cast3 = new Button("Mage");
         cast3.setBackground(Background.EMPTY);
-        cast3.setPadding(new Insets(250,100,250,100));
+        cast3.setPadding(new Insets(250, 100, 250, 100));
 
         cast3.setOnAction(e -> setUpMain(primaryStage, Mage.class));
 
         // Create the HBox
         HBox buttonBox = new HBox();
-        buttonBox.setPadding(new Insets(0,25,0,25));
+        buttonBox.setPadding(new Insets(0, 25, 0, 25));
         // Add the children to the HBox
         buttonBox.getChildren().addAll(cast1, cast2, cast3);
         // Set the vertical spacing between children to 15px
@@ -191,7 +191,7 @@ public class Main extends Application {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        BackgroundImage myBI= new BackgroundImage(new Image(file),
+        BackgroundImage myBI = new BackgroundImage(new Image(file),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
         root.setBackground(new Background(myBI));
@@ -201,7 +201,6 @@ public class Main extends Application {
         root.setSpacing(0);
         // Set the Size of the VBox
         root.setMinSize(800, 600);
-
 
 
         // Create the Scene
@@ -248,12 +247,8 @@ public class Main extends Application {
         inventory.setTextFill((Color.SLATEBLUE));
         list = new ListView<>(inventoryLabels);
         list.setPrefSize(170, 90);
-        list.setOnMouseClicked(mouseEvent -> {
-            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                if(mouseEvent.getClickCount() == 2){
-                    itemUsed();
-                }
-            }
+        list.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
         ui.add(list, 0, 4);
     }
@@ -282,11 +277,14 @@ public class Main extends Application {
     private void itemUsed() {
         map.getPlayer().useItem(itemTypes.get(list.getSelectionModel().getSelectedItem()));
         refresh();
+        updateInventory();
     }
 
 
     private void restart() {
+        nextLevel = 0;
         setStage("/level1.txt");
+        updateInventory();
     }
 
 
@@ -302,7 +300,7 @@ public class Main extends Application {
         victory.initStyle(StageStyle.TRANSPARENT);
 
         ButtonType buttonNewGame = new ButtonType("Yes");
-        ButtonType buttonClose = new ButtonType("No",ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonClose = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
         victory.getButtonTypes().setAll(buttonNewGame, buttonClose);
 
         Optional<ButtonType> result = victory.showAndWait();
@@ -352,27 +350,32 @@ public class Main extends Application {
                 break;
             case W:
 
-                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(0,-1),0,-1);
+                if (shooting && map.getPlayer().getWeapon() instanceof RangedWeapon)
+                    ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(0, -1), 0, -1);
                 else map.getPlayer().move(0, -1);
                 break;
             case S:
 
-                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(0,1),0,1);
+                if (shooting && map.getPlayer().getWeapon() instanceof RangedWeapon)
+                    ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(0, 1), 0, 1);
                 else map.getPlayer().move(0, 1);
                 break;
             case A:
 
-                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(-1,0),-1,0);
+                if (shooting && map.getPlayer().getWeapon() instanceof RangedWeapon)
+                    ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(-1, 0), -1, 0);
                 else map.getPlayer().move(-1, 0);
                 break;
             case D:
 
-                if(shooting && map.getPlayer().getWeapon() instanceof RangedWeapon) ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(1,0),1,0);
+                if (shooting && map.getPlayer().getWeapon() instanceof RangedWeapon)
+                    ((RangedWeapon) map.getPlayer().getWeapon()).shoot(map.getPlayer().getCell().getNeighbor(1, 0), 1, 0);
                 else map.getPlayer().move(1, 0);
 
                 break;
             case E:
                 map.getPlayer().pickUp();
+                updateInventory();
                 break;
             case Q:
                 map.getPlayer().castSpell();
@@ -381,8 +384,8 @@ public class Main extends Application {
         }
         refresh();
         if (map.getPlayer().isStairs()) {
-            nextLevel++;
-            setStage(levels[nextLevel]);
+
+            setStage(levels[++nextLevel]);
         }
 
         if (map.getPlayer().isObjective()) {
@@ -398,7 +401,6 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
-        nextLevel = 0;
         map = MapLoader.loadMap(level, playerCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
@@ -456,7 +458,7 @@ public class Main extends Application {
     }
 
     private void moveBullets() {
-        for (Ammo bullet: map.getAllAmmos()) {
+        for (Ammo bullet : map.getAllAmmos()) {
             bullet.moveBullet();
         }
         refresh();
@@ -520,16 +522,14 @@ public class Main extends Application {
         updateLabels();
         updateDurabilites();
         updateNearbyEnemies();
-        updateInventory();
     }
 
-    public static void setTimeout(Runnable runnable, int delay){
+    public static void setTimeout(Runnable runnable, int delay) {
         new Thread(() -> {
             try {
                 Thread.sleep(delay);
                 runnable.run();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.err.println(e);
             }
         }).start();
