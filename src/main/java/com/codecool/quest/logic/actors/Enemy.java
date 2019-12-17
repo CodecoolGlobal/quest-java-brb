@@ -6,8 +6,15 @@ import com.codecool.quest.logic.items.ItemTypes;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Enemy extends Actor{
-    public Enemy(Cell cell) {
+    String movementSpeed;
+
+    public String getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public Enemy(Cell cell, String movementSpeed) {
         super(cell);
+        this.movementSpeed = movementSpeed;
     }
 
     public void dropLoot(){

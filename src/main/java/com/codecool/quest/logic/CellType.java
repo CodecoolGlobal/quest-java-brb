@@ -8,6 +8,7 @@ public enum CellType {
     TORCH("torch"),
     STAIRS("stairs"),
     WATEREDGE("wateredge"),
+    OBJECTIVE("objective"),
     WALL("wall");
 
     private final String tileName;

@@ -52,6 +52,7 @@ public class Tiles {
         tileMap.put("golem", new Tile(30, 6));
         tileMap.put("banshee", new Tile(27, 6));
         tileMap.put("wateredge", new Tile(9, 5));
+        tileMap.put("objective", new Tile(12, 24));
     }
 
 
@@ -81,7 +82,7 @@ public class Tiles {
     }
 
     public static void generateGreenery(){
-        for (int i = 0;i<500;i++){
+        for (int i = 0;i<1000;i++){
             greenery.add((int) getRandomIntegerBetweenRange(0,7));
             greenery.add((int) getRandomIntegerBetweenRange(0,2));
         }

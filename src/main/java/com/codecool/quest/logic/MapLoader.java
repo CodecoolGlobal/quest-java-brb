@@ -114,6 +114,11 @@ public class MapLoader {
                             new LaserPistol(cell);
                             break;
 
+                            // objective
+                        case 'W':
+                            cell.setType(CellType.OBJECTIVE);
+                            break;
+
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

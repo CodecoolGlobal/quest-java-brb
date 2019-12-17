@@ -87,7 +87,6 @@ public class Player extends Actor {
 
     public Player(Cell cell) {
         super(cell);
-
     }
 
     public String getTileName() {
@@ -127,4 +126,7 @@ public class Player extends Actor {
         return this.getCell().getTileName().equals("stairs");
     }
 
+    public boolean isObjective() {
+        return this.getCell().getTileName().equals("objective");
+    }
 }

@@ -72,25 +72,22 @@ public class Main extends Application {
         put("KEY", Key.class);
         put("HEALTHPOTION", HealthPotion.class);
     }};
-    Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(1), e -> moveThings())
+    // slow moving enemies
+    Timeline slowTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> moveSlowEnemies())
     );
-
-    private void moveThings() {
-        moveEnemies();
-        moveBullets();
-        refresh();
-    }
-
-    private void moveBullets() {
-        for (Ammo bullet: map.getAllAmmos()) {
-            bullet.moveBullet();
-        }
-
-    }
+    // fast moving enemies
+    Timeline fastTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> moveFastEnemies())
+    );
+    // projectiles fired by the player
+    Timeline bulletTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.2), e -> moveBullets())
+    );
 
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
 
+    private static String[] levels = {"/level1.txt", "/level2.txt", "/level3.txt"};
 
     public static void main(String[] args) {
         launch(args);
@@ -149,7 +146,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Codecool Quest");
         primaryStage.show();
-        startEnemyMovement();
+        startAllMovement();
     }
 
     public void setUpWindow() {
@@ -188,7 +185,7 @@ public class Main extends Application {
         VBox root = new VBox();
         FileInputStream file = null;
         try {
-            file = new FileInputStream("/home/adrian/codecool/oop/quest-java-brb/src/main/resources/castselect.png");
+            file = new FileInputStream("/home/jeneses/codecool/oop/tw_week/quest-java-brb/src/main/resources/castselect.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -263,13 +260,17 @@ public class Main extends Application {
         setLabelStyle(combatingLabel, 13);
     }
 
-    public void startEnemyMovement() {
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+    public void startAllMovement() {
+        slowTimeline.setCycleCount(Animation.INDEFINITE);
+        fastTimeline.setCycleCount(Animation.INDEFINITE);
+        bulletTimeline.setCycleCount(Animation.INDEFINITE);
+        slowTimeline.play();
+        fastTimeline.play();
+        bulletTimeline.play();
     }
 
     public void endGame() {
-        if (isGameOver()) showAlert();
+        if (isGameOver()) showGameOverAlert();
     }
 
     private void itemUsed() {
@@ -287,8 +288,28 @@ public class Main extends Application {
         return map.getPlayer().isDead();
     }
 
-    private void showAlert() {
+    private void showVictoryAlert() {
+        Alert victory = new Alert(Alert.AlertType.CONFIRMATION);
+        victory.setTitle("Victory");
+        victory.setHeaderText(null);
+        victory.setContentText("Victory, you found the crown and became the ruler of the kingdom! Would you like to play again?");
+        victory.initStyle(StageStyle.TRANSPARENT);
 
+        ButtonType buttonNewGame = new ButtonType("Yes");
+        ButtonType buttonClose = new ButtonType("No",ButtonBar.ButtonData.CANCEL_CLOSE);
+        victory.getButtonTypes().setAll(buttonNewGame, buttonClose);
+
+        Optional<ButtonType> result = victory.showAndWait();
+        if (result.get() == buttonNewGame) {
+            // user clicked "yes"
+            restart();
+        } else {
+            // user clicked "no" or closed the dialog
+            mainStage.close();
+        }
+    }
+
+    private void showGameOverAlert() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Game Over");
         alert.setHeaderText(null);
@@ -353,6 +374,10 @@ public class Main extends Application {
         if (map.getPlayer().isStairs()) {
             setStage("/level2.txt");
         }
+
+        if (map.getPlayer().isObjective()) {
+            showVictoryAlert();
+        }
         endGame();
     }
 
@@ -363,7 +388,7 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
-        map = MapLoader.loadMap(level,playerCast);
+        map = MapLoader.loadMap(level, playerCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
@@ -371,8 +396,8 @@ public class Main extends Application {
         bp.setCenter(canvas);
     }
 
-    private void moveEnemies() {
-        for (Actor enemy : map.getAllEnemies()) {
+    private void moveSlowEnemies() {
+        for (Actor enemy : map.getSlowEnemies()) {
             double random = Tiles.getRandomIntegerBetweenRange(0, 5);
             int value = (int) random;
             switch (value) {
@@ -395,6 +420,36 @@ public class Main extends Application {
 
     }
 
+    private void moveFastEnemies() {
+        for (Actor enemy : map.getFastEnemies()) {
+            double random = Tiles.getRandomIntegerBetweenRange(0, 5);
+            int value = (int) random;
+            switch (value) {
+                case 0:
+                    break;
+                case 1:
+                    enemy.move(0, -1);
+                    break;
+                case 2:
+                    enemy.move(0, 1);
+                    break;
+                case 3:
+                    enemy.move(-1, 0);
+                    break;
+                case 4:
+                    enemy.move(1, 0);
+                    break;
+            }
+        }
+
+    }
+
+    private void moveBullets() {
+        for (Ammo bullet: map.getAllAmmos()) {
+            bullet.moveBullet();
+        }
+        refresh();
+    }
 
     private void refresh() {
         context.setFill(Color.BLACK);

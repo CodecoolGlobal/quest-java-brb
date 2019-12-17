@@ -31,16 +31,29 @@ public class GameMap {
         return cells[x][y];
     }
 
-    public List<Actor> getAllEnemies(){
-        List<Actor> enemies = new ArrayList<>();
+    public List<Actor> getSlowEnemies(){
+        List<Actor> slowEnemies = new ArrayList<>();
         for(int row = 0;row<width;row++){
             for(int col = 0;col<height;col++){
-                if(getCell(row,col).getActor() instanceof Enemy) enemies.add(getCell(row,col).getActor());
+                if(getCell(row,col).getActor() instanceof Enemy && isSlowEnemy(row, col)) slowEnemies.add(getCell(row,col).getActor());
             }
         }
-        return enemies;
+        return slowEnemies;
     }
 
+    public List<Actor> getFastEnemies(){
+        List<Actor> fastEnemies = new ArrayList<>();
+        for(int row = 0;row<width;row++){
+            for(int col = 0;col<height;col++){
+                if(getCell(row,col).getActor() instanceof Enemy && !isSlowEnemy(row, col)) fastEnemies.add(getCell(row,col).getActor());
+            }
+        }
+        return fastEnemies;
+    }
+
+    private boolean isSlowEnemy(int row, int col) {
+        return ((Enemy) getCell(row, col).getActor()).getMovementSpeed().equals("slow");
+    }
 
     public List<Ammo> getAllAmmos(){
         List<Ammo> ammos = new ArrayList<>();
