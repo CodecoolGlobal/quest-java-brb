@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class RangedWeapon extends Weapon {
     Class ammo;
 
+
     public RangedWeapon(Cell cell,Class ammo) {
         super(cell);
         this.ammo = ammo;
@@ -21,8 +22,9 @@ public abstract class RangedWeapon extends Weapon {
     }
 
     public void shoot(Cell cell,int dx, int dy){
+        loseDurability();
         try {
-            ammo.getConstructor(Cell.class,int.class,int.class).newInstance(cell, dx, dy);
+            ammo.getConstructor(Cell.class,int.class,int.class,int.class).newInstance(cell, dx, dy,this.getPower());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }

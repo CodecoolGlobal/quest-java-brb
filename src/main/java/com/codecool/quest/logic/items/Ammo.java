@@ -5,6 +5,7 @@ import com.codecool.quest.logic.Drawable;
 import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.actors.Enemy;
 
+
 public abstract class Ammo implements Drawable {
     int damage;
 
@@ -21,11 +22,12 @@ public abstract class Ammo implements Drawable {
         return direction;
     }
 
-    public Ammo(Cell cell, int dx, int dy){
+    public Ammo(Cell cell, int dx, int dy,int damage){
         this.cell = cell;
         this.cell.setAmmo(this);
         this.dx = dx;
         this.dy = dy;
+        this.damage = damage;
         switch (dx + String.valueOf(dy)){
             case "0-1":
                 direction = 0;

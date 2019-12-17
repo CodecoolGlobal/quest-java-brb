@@ -7,11 +7,12 @@ public class Golem extends Enemy{
         super(cell, "still");
         setHealth(200);
         setPower(50);
+        setTileName("golem");
     }
 
     @Override
     public String getTileName() {
-        return "golem";
+        return tileName;
     }
 
     @Override

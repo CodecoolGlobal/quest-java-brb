@@ -1,5 +1,6 @@
 package com.codecool.quest.logic.actors;
 
+import com.codecool.quest.Main;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.Drawable;
 import com.codecool.quest.logic.items.Consumable;
@@ -75,11 +76,20 @@ public abstract class Actor implements Drawable {
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (this instanceof Player && nextCell.getActor() instanceof Enemy ){
+            Enemy enemy = (Enemy) nextCell.getActor();
+            String savedTileName = nextCell.getActor().getTileName();
+
+            enemy.setTileName("hurt"+savedTileName);
+            Main.setTimeout(()->enemy.setTileName(savedTileName),250);
+
             this.attack(nextCell);
             ((Player) this).getWeapon().loseDurability();
 
         }
         else if (this instanceof Enemy && nextCell.getActor() instanceof Player){
+            String savedTileName = this.tileName;
+            this.setTileName("hurt"+tileName);
+            Main.setTimeout(()->this.setTileName(savedTileName),250);
             this.attack(nextCell);
             ((Player) nextCell.getActor()).damageEquipment();
 
@@ -110,6 +120,10 @@ public abstract class Actor implements Drawable {
 
     public Cell getCell() {
         return cell;
+    }
+
+    public void setTileName(String tileName) {
+        this.tileName = tileName;
     }
 
     @Override

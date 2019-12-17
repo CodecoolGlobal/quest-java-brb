@@ -30,6 +30,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -100,7 +101,7 @@ public class Main extends Application {
 
     public void setUpMain(Stage primaryStage, Class choosenCast){
         playerCast = choosenCast;
-        map = MapLoader.loadMap("/level1.txt",choosenCast);
+        map = MapLoader.loadMap("/level3.txt",choosenCast);
         canvas =  new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
@@ -246,8 +247,12 @@ public class Main extends Application {
         inventory.setTextFill((Color.SLATEBLUE));
         list = new ListView<>(inventoryLabels);
         list.setPrefSize(170, 90);
-        list.setOnKeyPressed(key -> {
-            if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
+        list.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                if(mouseEvent.getClickCount() == 2){
+                    itemUsed();
+                }
+            }
         });
         ui.add(list, 0, 4);
     }
@@ -367,6 +372,9 @@ public class Main extends Application {
                 break;
             case E:
                 map.getPlayer().pickUp();
+                break;
+            case Q:
+                map.getPlayer().castSpell();
                 break;
 
         }
@@ -510,5 +518,17 @@ public class Main extends Application {
         updateDurabilites();
         updateNearbyEnemies();
         updateInventory();
+    }
+
+    public static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
     }
 }

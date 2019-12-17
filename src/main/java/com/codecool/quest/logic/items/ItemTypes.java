@@ -8,7 +8,9 @@ public enum ItemTypes {
     SWORD(Sword.class),
     HELMET(Helmet.class),
     SHIELD(Shield.class),
-    AXE(Axe.class);
+    AXE(Axe.class),
+    BOW(Bow.class),
+    CROSSBOW(Crossbow.class);
 
 
     private final Class itemName;

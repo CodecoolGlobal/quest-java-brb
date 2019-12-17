@@ -1,8 +1,13 @@
 package com.codecool.quest.logic.actors;
 
+import com.codecool.quest.Main;
 import com.codecool.quest.logic.Cell;
+import com.codecool.quest.logic.CellType;
 import com.codecool.quest.logic.items.*;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class Player extends Actor {
 
@@ -21,9 +26,9 @@ public class Player extends Actor {
         return getWeapon() != null;
     }
 
-    public void damageEquipment(){
-        if(getHelmet() != null) getHelmet().loseDurability();
-        if(getShield() != null) getShield().loseDurability();
+    public void damageEquipment() {
+        if (getHelmet() != null) getHelmet().loseDurability();
+        if (getShield() != null) getShield().loseDurability();
     }
 
     public Armory getWeapon() {
@@ -78,16 +83,18 @@ public class Player extends Actor {
         return inventory;
     }
 
-    public Consumable inventoryGetItem(Class<?> type){
-        for(Consumable item : getInventory()){
-            if(item.getClass().equals(type)) return item;
+    public Consumable inventoryGetItem(Class<?> type) {
+        for (Consumable item : getInventory()) {
+            if (item.getClass().equals(type)) return item;
         }
         return null;
     }
 
+
     public Player(Cell cell) {
         super(cell);
     }
+
 
     public String getTileName() {
         return isWeaponed() && isArmored() ? "fullSetPlayer" : isWeaponed() ? "weaponedPlayer" : isArmored() ? "armoredPlayer" : "player";
@@ -97,27 +104,27 @@ public class Player extends Actor {
         this.tileName = tileName;
     }
 
-    public void pickUp(){
-        if(this.getCell().getItem() != null){
+    public void pickUp() {
+        if (this.getCell().getItem() != null) {
             this.getCell().getItem().pickedUp(this);
             this.getCell().setItem(null);
         }
     }
 
-    public boolean hasItem(Class<?> type){
-        if(type == null) return false;
+    public boolean hasItem(Class<?> type) {
+        if (type == null) return false;
         for (Item item : this.inventory) {
             if (type.isInstance(item)) return true;
         }
         return false;
     }
 
-    public void removeFromInventory(Item item){
+    public void removeFromInventory(Item item) {
         this.inventory.removeIf(deleteItem -> deleteItem.hashCode() == item.hashCode());
     }
 
-    public void useItem(Class<?> type){
-        if(this.hasItem(type)){
+    public void useItem(Class<?> type) {
+        if (this.hasItem(type)) {
             inventoryGetItem(type).use(this);
         }
     }
@@ -128,5 +135,28 @@ public class Player extends Actor {
 
     public boolean isObjective() {
         return this.getCell().getTileName().equals("objective");
+    }
+
+    public void castSpell() {
+        List<Enemy> enemies = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+
+        getCell().getAllNeighbors().forEach((cell -> {
+            if (cell.getActor() instanceof Enemy) {
+                Actor enemy = cell.getActor();
+                enemies.add((Enemy) enemy);
+                names.add(enemy.getTileName());
+                enemy.setTileName("hurt"+enemy.getTileName());
+
+                enemy.setHealth(enemy.getHealth() - 9);
+                if (enemy.isDead()) enemy.die();
+            }
+
+        }));
+        Main.setTimeout(() -> {
+            for (int i = 0; i < enemies.size(); i++) {
+                enemies.get(i).setTileName(names.get(i));
+            }
+        }, 250);
     }
 }
