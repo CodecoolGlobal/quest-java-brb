@@ -89,6 +89,7 @@ public class Main extends Application {
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
 
     private static String[] levels = {"/level1.txt", "/level2.txt", "/level3.txt"};
+    private static int nextLevel = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -101,7 +102,7 @@ public class Main extends Application {
 
     public void setUpMain(Stage primaryStage, Class choosenCast){
         playerCast = choosenCast;
-        map = MapLoader.loadMap("/level3.txt",choosenCast);
+        map = MapLoader.loadMap("/level1.txt",choosenCast);
         canvas =  new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
@@ -380,7 +381,8 @@ public class Main extends Application {
         }
         refresh();
         if (map.getPlayer().isStairs()) {
-            setStage("/level2.txt");
+            nextLevel++;
+            setStage(levels[nextLevel]);
         }
 
         if (map.getPlayer().isObjective()) {
@@ -396,6 +398,7 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
+        nextLevel = 0;
         map = MapLoader.loadMap(level, playerCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
