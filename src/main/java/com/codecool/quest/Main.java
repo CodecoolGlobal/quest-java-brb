@@ -101,7 +101,7 @@ public class Main extends Application {
 
     public void setUpMain(Stage primaryStage, Class choosenCast){
         playerCast = choosenCast;
-        map = MapLoader.loadMap("/level3.txt",choosenCast);
+        map = MapLoader.loadMap("/level1.txt",choosenCast);
         canvas =  new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
@@ -186,7 +186,7 @@ public class Main extends Application {
         VBox root = new VBox();
         FileInputStream file = null;
         try {
-            file = new FileInputStream("/home/jeneses/codecool/oop/tw_week/quest-java-brb/src/main/resources/castselect.png");
+            file = new FileInputStream("src/main/resources/castselect.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
