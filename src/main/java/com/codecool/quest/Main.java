@@ -112,7 +112,7 @@ public class Main extends Application {
 
     public void setUpMain(Stage primaryStage, Class choosenCast) {
         playerCast = choosenCast;
-        map = MapLoader.loadMap("/level1.txt", choosenCast);
+        map = MapLoader.loadMap(levels[nextLevel], choosenCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);

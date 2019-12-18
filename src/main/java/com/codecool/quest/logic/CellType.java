@@ -10,7 +10,10 @@ public enum CellType {
     WATEREDGE("wateredge"),
     OBJECTIVE("objective"),
     WALL("wall"),
-    SHOP("shop");
+    SHOP("shop"),
+    PLACEHOLDER("placeholder"),
+    DIGGABLE("diggable");
+
 
     private final String tileName;
 

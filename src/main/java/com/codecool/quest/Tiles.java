@@ -11,13 +11,13 @@ import java.util.*;
 public class Tiles {
     public static int TILE_WIDTH = 32;
 
-    private static Image tileset = new Image("/tiles7.png", 543 * 2, 543 * 2, true, false);
+    private static Image tileset = new Image("/tiles8.png", 543 * 2, 543 * 2, true, false);
+
     private static Map<String, Tile> tileMap = new HashMap<>();
     public static ArrayList<Integer> greenery = new ArrayList<>();
     public static ListIterator<Integer> iterator = greenery.listIterator();
     public static class Tile {
         public final int x, y, w, h;
-
         Tile(int i, int j) {
             x = i * (TILE_WIDTH + 2);
             y = j * (TILE_WIDTH + 2);
@@ -37,6 +37,9 @@ public class Tiles {
         tileMap.put("wateredge", new Tile(9, 5));
         tileMap.put("objective", new Tile(12, 24));
         tileMap.put("shop", new Tile(22, 11));
+        tileMap.put("placeholder", new Tile(12, 10));
+        tileMap.put("diggable", new Tile(12, 18));
+
         //CHARACTERS
         tileMap.put("warrior", new Tile(25, 0));
         tileMap.put("weaponedWarrior", new Tile(27, 0));
@@ -56,9 +59,11 @@ public class Tiles {
         tileMap.put("hurtmonster", new Tile(25, 8));
         tileMap.put("hurtbanshee", new Tile(26, 8));
         tileMap.put("hurtgolem", new Tile(25, 9));
+
         //EQUIPMENTS
         tileMap.put("shield", new Tile(8,26));
         tileMap.put("helmet", new Tile(1,22));
+
         //WEAPONS
         tileMap.put("arrow", new Tile(15, 18));
         tileMap.put("axe", new Tile(10, 30));
@@ -68,15 +73,14 @@ public class Tiles {
         tileMap.put("laserpistol", new Tile (6, 31));
         tileMap.put("laser", new Tile (13, 31));
         tileMap.put("fireball", new Tile (14, 31));
+
         //ITEMS
         tileMap.put("heart", new Tile(23, 22));
         tileMap.put("key", new Tile(16, 23));
         tileMap.put("healthPotion", new Tile(17, 25));
         tileMap.put("coin", new Tile(9, 25));
         tileMap.put("coinPile", new Tile(9, 26));
-
-
-
+        tileMap.put("shovel", new Tile(10, 27));
     }
 
 
@@ -87,7 +91,6 @@ public class Tiles {
         } else {
             tile = tileMap.get(d.getTileName());
         }
-
 
         if(d instanceof Ammo){
             double angle = ((Ammo) d).getDirection();
@@ -106,7 +109,7 @@ public class Tiles {
     }
 
     public static void generateGreenery(){
-        for (int i = 0;i<1500;i++){
+        for (int i = 0;i<600;i++){
             greenery.add((int) getRandomIntegerBetweenRange(0,7));
             greenery.add((int) getRandomIntegerBetweenRange(0,2));
         }

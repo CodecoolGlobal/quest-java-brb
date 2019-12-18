@@ -1,7 +1,6 @@
 package com.codecool.quest.logic.items;
 
 import com.codecool.quest.logic.Cell;
-import com.codecool.quest.logic.actors.Actor;
 import com.codecool.quest.logic.actors.Player;
 
 public class HealthPotion extends Consumable implements HealingItem{

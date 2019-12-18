@@ -1,5 +1,6 @@
 package com.codecool.quest.logic;
 
+import com.codecool.quest.Tiles.Tile;
 import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.Ammo;
 
@@ -31,11 +32,21 @@ public class GameMap {
         return cells[x][y];
     }
 
+    public List<Cell> getAllWalls(){
+        List<Cell> gatheredWalls = new ArrayList<>();
+        for (int row = 0; row < width; row++) {
+            for (int col = 0; col < height; col++){
+                if(getCell(row, col).getTileName().equals("wall")) gatheredWalls.add(getCell(row, col));            }
+        }
+        return gatheredWalls;
+    }
+
     public List<Actor> getSlowEnemies(){
         List<Actor> slowEnemies = new ArrayList<>();
         for(int row = 0;row<width;row++){
             for(int col = 0;col<height;col++){
-                if(getCell(row,col).getActor() instanceof Enemy && isSlowEnemy(row, col)) slowEnemies.add(getCell(row,col).getActor());
+                Actor enemy = getCell(row,col).getActor();
+                if(enemy instanceof Enemy && isSlowEnemy(row, col)) slowEnemies.add(enemy);
             }
         }
         return slowEnemies;
@@ -45,7 +56,8 @@ public class GameMap {
         List<Actor> fastEnemies = new ArrayList<>();
         for(int row = 0;row<width;row++){
             for(int col = 0;col<height;col++){
-                if(getCell(row,col).getActor() instanceof Enemy && !isSlowEnemy(row, col)) fastEnemies.add(getCell(row,col).getActor());
+                Actor enemy = getCell(row, col).getActor();
+                if(enemy instanceof Enemy && !isSlowEnemy(row, col)) fastEnemies.add(enemy);
             }
         }
         return fastEnemies;

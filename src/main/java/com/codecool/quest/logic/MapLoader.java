@@ -48,11 +48,16 @@ public class MapLoader {
                         case 'T':
                             cell.setType(CellType.TORCH);
                             break;
+                        case 'F':
+                            cell.setType(CellType.PLACEHOLDER);
+                            break;
                         case '-':
                             cell.setType(CellType.WATEREDGE);
                             break;
                         case '$':
                             cell.setType(CellType.SHOP);
+                        case '_':
+                            cell.setType(CellType.DIGGABLE);
                             break;
 
                          // actors
@@ -78,17 +83,13 @@ public class MapLoader {
                             break;
                         case 'B':
                             cell.setType(CellType.FLOOR);
-                            map.setBanshee(new Banshee(cell));
+                            map.setBanshee(new Banshee(cell, map));
                             break;
 
                         // items
                         case 'K':
                             cell.setType(CellType.FLOOR);
                             new Key(cell);
-                            break;
-                        case 'I':
-                            cell.setType(CellType.FLOOR);
-                            new Bow(cell);
                             break;
                         case 'P':
                             cell.setType(CellType.FLOOR);
@@ -97,6 +98,10 @@ public class MapLoader {
                         case 'H':
                             cell.setType(CellType.FLOOR);
                             new Heart(cell);
+                            break;
+                        case 'O':
+                            cell.setType(CellType.FLOOR);
+                            new Shovel(cell);
                             break;
 
                         // weapons
@@ -115,6 +120,10 @@ public class MapLoader {
                         case 'L':
                             cell.setType(CellType.FLOOR);
                             new LaserPistol(cell);
+                            break;
+                        case 'I':
+                            cell.setType(CellType.FLOOR);
+                            new Bow(cell);
                             break;
 
                             // objective

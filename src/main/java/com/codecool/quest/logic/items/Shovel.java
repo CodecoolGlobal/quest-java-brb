@@ -3,20 +3,18 @@ package com.codecool.quest.logic.items;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.actors.Player;
 
-public class Key extends Consumable{
-
-    public Key(Cell cell) {
+public class Shovel extends Consumable {
+    public Shovel(Cell cell) {
         super(cell);
     }
 
     @Override
     public void use(Player player) {
-        player.getCell().checkDoors();
-//        player.removeFromInventory(this);
+        player.removeFromInventory(this);
     }
 
     @Override
     public String getTileName() {
-        return "key";
+        return "shovel";
     }
 }
