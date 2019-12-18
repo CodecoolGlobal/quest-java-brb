@@ -10,4 +10,14 @@ public class Rouge extends Player{
         setPower(getBasePower());
         setHealth(getMaxHealth());
     }
+
+    @Override
+    public void castSpell() {
+
+    }
+
+    @Override
+    public String getTileName() {
+        return "rouge";
+    }
 }
