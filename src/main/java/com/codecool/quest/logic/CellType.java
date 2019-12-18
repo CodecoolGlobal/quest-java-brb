@@ -9,6 +9,8 @@ public enum CellType {
     STAIRS("stairs"),
     WATEREDGE("wateredge"),
     OBJECTIVE("objective"),
+    PLACEHOLDER("placeholder"),
+    DIGGABLE("diggable"),
     WALL("wall");
 
     private final String tileName;

@@ -16,7 +16,7 @@ public abstract class Actor implements Drawable {
     public void setCell(Cell cell) {
         this.cell = cell;
     }
-    private Cell cell;
+    public Cell cell;
     private int health;
     private double resi;
     private double baseResi = 1;
@@ -75,6 +75,12 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
+        battle(nextCell);
+        checkObstacle(nextCell);
+
+    }
+
+    public void battle(Cell nextCell) {
         if (this instanceof Player && nextCell.getActor() instanceof Enemy ){
             Enemy enemy = (Enemy) nextCell.getActor();
             String savedTileName = nextCell.getActor().getTileName();
@@ -94,6 +100,9 @@ public abstract class Actor implements Drawable {
             ((Player) nextCell.getActor()).damageEquipment();
 
         }
+    }
+
+    private void checkObstacle(Cell nextCell){
         if (!nextCell.isObstacle()) {
             cell.setActor(null);
             nextCell.setActor(this);
