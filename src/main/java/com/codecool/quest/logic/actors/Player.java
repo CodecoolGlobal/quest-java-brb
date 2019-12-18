@@ -2,14 +2,12 @@ package com.codecool.quest.logic.actors;
 
 import com.codecool.quest.Main;
 import com.codecool.quest.logic.Cell;
-import com.codecool.quest.logic.CellType;
 import com.codecool.quest.logic.items.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class Player extends Actor {
+public abstract class Player extends Actor {
 
     private Armory weapon;
     private Helmet helmet;
@@ -96,10 +94,6 @@ public class Player extends Actor {
     }
 
 
-    public String getTileName() {
-        return isWeaponed() && isArmored() ? "fullSetPlayer" : isWeaponed() ? "weaponedPlayer" : isArmored() ? "armoredPlayer" : "player";
-    }
-
     public void setTileName(String tileName) {
         this.tileName = tileName;
     }
@@ -137,26 +131,7 @@ public class Player extends Actor {
         return this.getCell().getTileName().equals("objective");
     }
 
-    public void castSpell() {
-        List<Enemy> enemies = new ArrayList<>();
-        List<String> names = new ArrayList<>();
+    public abstract void castSpell();
 
-        getCell().getAllNeighbors().forEach((cell -> {
-            if (cell.getActor() instanceof Enemy) {
-                Actor enemy = cell.getActor();
-                enemies.add((Enemy) enemy);
-                names.add(enemy.getTileName());
-                enemy.setTileName("hurt"+enemy.getTileName());
-
-                enemy.setHealth(enemy.getHealth() - 9);
-                if (enemy.isDead()) enemy.die();
-            }
-
-        }));
-        Main.setTimeout(() -> {
-            for (int i = 0; i < enemies.size(); i++) {
-                enemies.get(i).setTileName(names.get(i));
-            }
-        }, 250);
-    }
+    public abstract String getTileName();
 }

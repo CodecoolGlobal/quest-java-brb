@@ -11,7 +11,7 @@ import java.util.*;
 public class Tiles {
     public static int TILE_WIDTH = 32;
 
-    private static Image tileset = new Image("/tiles5.png", 543 * 2, 543 * 2, true, false);
+    private static Image tileset = new Image("/tiles7.png", 543 * 2, 543 * 2, true, false);
     private static Map<String, Tile> tileMap = new HashMap<>();
     public static ArrayList<Integer> greenery = new ArrayList<>();
     public static ListIterator<Integer> iterator = greenery.listIterator();
@@ -27,37 +27,51 @@ public class Tiles {
     }
 
     static {
+        //ENVIROMENT
         tileMap.put("wall", new Tile(10, 17));
-        tileMap.put("arrow", new Tile(25, 17));
         tileMap.put("floor", new Tile(2, 0));
-        tileMap.put("player", new Tile(25, 0));
-        tileMap.put("weaponedPlayer", new Tile(27, 0));
-        tileMap.put("armoredPlayer", new Tile(30, 0));
-        tileMap.put("fullSetPlayer", new Tile(31, 0));
-        tileMap.put("skeleton", new Tile(29, 6));
-        tileMap.put("monster", new Tile(28, 6));
-        tileMap.put("sword", new Tile(4, 28));
-        tileMap.put("bow", new Tile(5, 28));
-        tileMap.put("crossbow", new Tile(7, 27));
-        tileMap.put("axe", new Tile(10, 30));
-        tileMap.put("shield", new Tile(8,26));
-        tileMap.put("helmet", new Tile(1,22));
         tileMap.put("closeddoor", new Tile(3, 3));
         tileMap.put("opendoor", new Tile(4, 3));
-        tileMap.put("key", new Tile(16, 23));
         tileMap.put("stairs", new Tile(4, 6));
-        tileMap.put("heart", new Tile(23, 22));
         tileMap.put("torch", new Tile(4, 15));
-        tileMap.put("healthPotion", new Tile(17, 25));
-        tileMap.put("laserpistol", new Tile (6, 31));
-        tileMap.put("laser", new Tile (15, 10));
-        tileMap.put("golem", new Tile(30, 6));
-        tileMap.put("banshee", new Tile(27, 6));
         tileMap.put("wateredge", new Tile(9, 5));
         tileMap.put("objective", new Tile(12, 24));
+        //CHARACTERS
+        tileMap.put("warrior", new Tile(25, 0));
+        tileMap.put("weaponedWarrior", new Tile(27, 0));
+        tileMap.put("armoredWarrior", new Tile(30, 0));
+        tileMap.put("fullSetWarrior", new Tile(31, 0));
+        tileMap.put("mage", new Tile(24, 0));
+        tileMap.put("weaponedMage", new Tile(25, 1));
+        tileMap.put("armoredMage", new Tile(24, 2));
+        tileMap.put("fullSetMage", new Tile(24, 1));
+
+        //ENEMIES
+        tileMap.put("skeleton", new Tile(29, 6));
+        tileMap.put("monster", new Tile(28, 6));
+        tileMap.put("golem", new Tile(30, 6));
+        tileMap.put("banshee", new Tile(27, 6));
         tileMap.put("hurtskeleton", new Tile(24, 8));
         tileMap.put("hurtmonster", new Tile(25, 8));
         tileMap.put("hurtbanshee", new Tile(26, 8));
+        //EQUIPMENTS
+        tileMap.put("shield", new Tile(8,26));
+        tileMap.put("helmet", new Tile(1,22));
+        //WEAPONS
+        tileMap.put("arrow", new Tile(15, 18));
+        tileMap.put("axe", new Tile(10, 30));
+        tileMap.put("bow", new Tile(5, 28));
+        tileMap.put("sword", new Tile(4, 28));
+        tileMap.put("crossbow", new Tile(7, 27));
+        tileMap.put("laserpistol", new Tile (6, 31));
+        tileMap.put("laser", new Tile (13, 31));
+        tileMap.put("fireball", new Tile (14, 31));
+        //ITEMS
+        tileMap.put("heart", new Tile(23, 22));
+        tileMap.put("key", new Tile(16, 23));
+        tileMap.put("healthPotion", new Tile(17, 25));
+
+
     }
 
 
