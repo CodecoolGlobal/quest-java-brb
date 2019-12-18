@@ -6,7 +6,6 @@ import com.codecool.quest.logic.MapLoader;
 import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.*;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.Math;
@@ -17,8 +16,6 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -30,8 +27,6 @@ import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -41,7 +36,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.stage.StageStyle;
 
-import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -62,13 +57,18 @@ public class Main extends Application {
     Label combatingLabel = new Label();
     Label powerLabel = new Label();
     GridPane ui = new GridPane();
-    ListView<String> list;
+    TableView table = new TableView();
+    ListView<String> inventoryList;
+    ListView<String> shopList;
     Stage mainStage;
     BorderPane bp;
     Label weaponDurability = new Label();
     Label helmetDurability = new Label();
     Label shieldDurability = new Label();
+    Label shopLabel = new Label();
+    Label coins = new Label();
     Label defenseLabel = new Label();
+    ProgressIndicator pi = new ProgressIndicator(0);
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("KEY", Key.class);
         put("HEALTHPOTION", HealthPotion.class);
@@ -86,7 +86,17 @@ public class Main extends Application {
             new KeyFrame(Duration.seconds(0.2), e -> moveBullets())
     );
 
+    Timeline veryfast = new Timeline(
+            new KeyFrame(Duration.seconds(0.01), e -> updateSpellProgress())
+    );
+
+    private void updateSpellProgress() {
+        pi.setProgress((double) java.time.Duration.between(map.getPlayer().getSpellLastUsed(), Instant.now()).toMillis() / map.getPlayer().getSpellCooldown());
+    }
+
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
+    private ObservableList<String> shopItemLabels = FXCollections.observableArrayList();
+
 
     private static String[] levels = {"/level1.txt", "/level2.txt", "/level3.txt"};
     private static int nextLevel = 0;
@@ -112,6 +122,10 @@ public class Main extends Application {
         setUpPower();
         setUpInventory();
         setUpCombatLogs();
+        setSpellProgress();
+        setUpBank();
+        setUpShop();
+
         ui.setGridLinesVisible(false);
         ui.setVgap(3);
 
@@ -136,6 +150,7 @@ public class Main extends Application {
         defenseLabel.setEffect(new Glow(0.5));
         BorderPane borderPane = new BorderPane();
         bp = borderPane;
+
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
 
@@ -151,10 +166,25 @@ public class Main extends Application {
         startAllMovement();
     }
 
+    public void setSpellProgress() {
+        Label pogressLabel = new Label("Spell Cooldown: ");
+        setLabelStyle(pogressLabel,14);
+        ui.add(pogressLabel, 0, 13);
+        ui.add(pi, 1, 13);
+    }
+
     public void setUpWindow() {
         ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
     }
+
+    public void setUpBank(){
+        Label bank = new Label("Coins: ");
+        setLabelStyle(bank,14);
+        ui.add(bank,0,17);
+        ui.add(coins,1,17);
+    }
+
 
     public void setUpCharacterSelect(Stage primaryStage) {
 
@@ -245,12 +275,28 @@ public class Main extends Application {
         ui.add(inventory, 0, 3);
         setLabelStyle(inventory, 15);
         inventory.setTextFill((Color.SLATEBLUE));
-        list = new ListView<>(inventoryLabels);
-        list.setPrefSize(170, 90);
-        list.setOnKeyPressed(key -> {
+        inventoryList = new ListView<>(inventoryLabels);
+        inventoryList.setPrefSize(170, 90);
+        inventoryList.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
-        ui.add(list, 0, 4);
+        ui.add(inventoryList, 0, 4);
+    }
+
+    public void setUpShop() {
+        shopItemLabels.clear();
+        for(int i= 0;i<5;i++){
+            shopItemLabels.add(ItemTypes.getRandomItem().getSimpleName());
+        }
+        shopLabel.setText("Shop:");
+        ui.add(shopLabel, 0, 19);
+        setLabelStyle(shopLabel, 14);
+        shopLabel.setTextFill((Color.SLATEBLUE));
+        shopList = new ListView<>(shopItemLabels);
+        shopList.setPrefSize(170, 150);
+        ui.add(shopList, 0, 20);
+        shopList.setVisible(false);
+        shopLabel.setVisible(false);
     }
 
     public void setUpCombatLogs() {
@@ -265,9 +311,11 @@ public class Main extends Application {
         slowTimeline.setCycleCount(Animation.INDEFINITE);
         fastTimeline.setCycleCount(Animation.INDEFINITE);
         bulletTimeline.setCycleCount(Animation.INDEFINITE);
+        veryfast.setCycleCount(Animation.INDEFINITE);
         slowTimeline.play();
         fastTimeline.play();
         bulletTimeline.play();
+        veryfast.play();
     }
 
     public void endGame() {
@@ -275,7 +323,7 @@ public class Main extends Application {
     }
 
     private void itemUsed() {
-        map.getPlayer().useItem(itemTypes.get(list.getSelectionModel().getSelectedItem()));
+        map.getPlayer().useItem(itemTypes.get(inventoryList.getSelectionModel().getSelectedItem()));
         refresh();
         updateInventory();
     }
@@ -384,14 +432,31 @@ public class Main extends Application {
         }
         refresh();
         if (map.getPlayer().isStairs()) {
-
             setStage(levels[++nextLevel]);
         }
+        if (map.getPlayer().isShop()) {
+            openShop();
+        }
+        else closeShop();
 
         if (map.getPlayer().isObjective()) {
             showVictoryAlert();
         }
         endGame();
+    }
+
+
+
+    private void closeShop() {
+        shopList.setVisible(false);
+        shopLabel.setVisible(false);
+
+    }
+
+    private void openShop() {
+        shopList.setVisible(true);
+        shopLabel.setVisible(true);
+
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -401,12 +466,14 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
+
         map = MapLoader.loadMap(level, playerCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
         bp.setCenter(canvas);
+        setUpShop();
     }
 
     private void moveSlowEnemies() {
@@ -516,7 +583,9 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth() + "/" + map.getPlayer().getMaxHealth());
         powerLabel.setText("" + map.getPlayer().getPower());
         defenseLabel.setText("" + (100 - Math.round(map.getPlayer().getResi() * 100)));
+        coins.setText(""+ map.getPlayer().getBank());
     }
+
 
     private void updateUI() {
         updateLabels();

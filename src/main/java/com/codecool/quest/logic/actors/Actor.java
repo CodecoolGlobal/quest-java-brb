@@ -13,6 +13,7 @@ import java.util.List;
 public abstract class Actor implements Drawable {
     protected List<Consumable> inventory = new ArrayList<>();
     protected String tileName;
+    private String baseTileName;
     public void setCell(Cell cell) {
         this.cell = cell;
     }
@@ -54,6 +55,14 @@ public abstract class Actor implements Drawable {
 
     private int maxHealth;
 
+    public String getBaseTileName() {
+        return baseTileName;
+    }
+
+    public void setBaseTileName(String baseTileName) {
+        this.baseTileName = baseTileName;
+    }
+
     public int getPower() {
         return power;
     }
@@ -77,28 +86,29 @@ public abstract class Actor implements Drawable {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (this instanceof Player && nextCell.getActor() instanceof Enemy ){
             Enemy enemy = (Enemy) nextCell.getActor();
-            String savedTileName = nextCell.getActor().getTileName();
 
-            enemy.setTileName("hurt"+savedTileName);
-            Main.setTimeout(()->enemy.setTileName(savedTileName),250);
+            enemy.setTileName("hurt"+enemy.getBaseTileName());
+            Main.setTimeout(()->enemy.setTileName(enemy.getBaseTileName()),250);
 
             this.attack(nextCell);
             ((Player) this).getWeapon().loseDurability();
 
         }
         else if (this instanceof Enemy && nextCell.getActor() instanceof Player){
-            String savedTileName = this.tileName;
-            this.setTileName("hurt"+tileName);
-            Main.setTimeout(()->this.setTileName(savedTileName),250);
+            this.setTileName("hurt"+this.getBaseTileName());
+            Main.setTimeout(()->this.setTileName(this.getBaseTileName()),250);
             this.attack(nextCell);
             ((Player) nextCell.getActor()).damageEquipment();
 
         }
+
         if (!nextCell.isObstacle()) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
+
+
     }
 
     public void attack(Cell cell){

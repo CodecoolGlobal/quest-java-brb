@@ -36,6 +36,7 @@ public class Tiles {
         tileMap.put("torch", new Tile(4, 15));
         tileMap.put("wateredge", new Tile(9, 5));
         tileMap.put("objective", new Tile(12, 24));
+        tileMap.put("shop", new Tile(22, 11));
         //CHARACTERS
         tileMap.put("warrior", new Tile(25, 0));
         tileMap.put("weaponedWarrior", new Tile(27, 0));
@@ -71,6 +72,9 @@ public class Tiles {
         tileMap.put("heart", new Tile(23, 22));
         tileMap.put("key", new Tile(16, 23));
         tileMap.put("healthPotion", new Tile(17, 25));
+        tileMap.put("coin", new Tile(9, 25));
+        tileMap.put("coinPile", new Tile(9, 26));
+
 
 
     }

@@ -7,12 +7,14 @@ public class Banshee extends Enemy {
         super(cell, "slow");
         setHealth(6);
         setBasePower(2);
+        setTileName("banshee");
+        setBaseTileName(tileName);
     }
 
-//    private
 
-    @Override
+
+        @Override
     public String getTileName() {
-        return "banshee";
+        return tileName;
     }
 }

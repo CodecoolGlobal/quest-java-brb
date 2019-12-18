@@ -8,6 +8,7 @@ public class Skeleton extends Enemy {
         setHealth(40);
         setPower(10);
         setTileName("skeleton");
+        setBaseTileName(tileName);
     }
 
     @Override
