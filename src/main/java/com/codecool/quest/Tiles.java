@@ -87,7 +87,7 @@ public class Tiles {
     }
 
     public static void generateGreenery(){
-        for (int i = 0;i<1500;i++){
+        for (int i = 0;i<1000;i++){
             greenery.add((int) getRandomIntegerBetweenRange(0,7));
             greenery.add((int) getRandomIntegerBetweenRange(0,2));
         }
