@@ -22,11 +22,14 @@ public abstract class RangedWeapon extends Weapon {
     }
 
     public void shoot(Cell cell,int dx, int dy){
-        loseDurability();
-        try {
-            ammo.getConstructor(Cell.class,int.class,int.class,int.class).newInstance(cell, dx, dy,this.getPower());
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
+        if(!cell.getNeighbor(dx,dy).getTileName().equals("wall")){
+            loseDurability();
+            try {
+                ammo.getConstructor(Cell.class,int.class,int.class,int.class).newInstance(cell, dx, dy,this.getPower());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }

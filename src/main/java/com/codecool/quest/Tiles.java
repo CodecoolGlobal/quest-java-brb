@@ -54,6 +54,7 @@ public class Tiles {
         tileMap.put("hurtskeleton", new Tile(24, 8));
         tileMap.put("hurtmonster", new Tile(25, 8));
         tileMap.put("hurtbanshee", new Tile(26, 8));
+        tileMap.put("hurtgolem", new Tile(25, 9));
         //EQUIPMENTS
         tileMap.put("shield", new Tile(8,26));
         tileMap.put("helmet", new Tile(1,22));

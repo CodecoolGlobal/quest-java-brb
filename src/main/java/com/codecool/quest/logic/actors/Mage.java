@@ -14,10 +14,15 @@ public class Mage extends Player{
 
     @Override
     public void castSpell() {
-        new Fireball(getCell(),-1,0,11);
-        new Fireball(getCell(),0,-1,11);
-        new Fireball(getCell(),1,0,11);
-        new Fireball(getCell(),0,1,11);
+        shootFireball(-1,0,11);
+        shootFireball(0,1,11);
+        shootFireball(0,-1,11);
+        shootFireball(1,0,11);
+    }
+
+    public void shootFireball(int dx,int dy,int dmg){
+        new Fireball(getCell().getNeighbor(dx,dy),dx,dy,dmg);
+
     }
 
     @Override
