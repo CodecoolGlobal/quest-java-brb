@@ -11,7 +11,7 @@ public class Mage extends Player{
 
     public Mage(Cell cell) {
         super(cell);
-        setMaxHealth(45);
+        setMaxHealth(50);
         setBasePower(20);
         setPower(getBasePower());
         setHealth(getMaxHealth());

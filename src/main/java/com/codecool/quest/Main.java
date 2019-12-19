@@ -194,36 +194,36 @@ public class Main extends Application {
 
     public void setUpCharacterSelect(Stage primaryStage) {
 
-        Button cast1 = new Button("Warrior");
-        cast1.setPadding(new Insets(250, 100, 250, 100));
+        Button cast1 = new Button("");
+        cast1.setPadding(new Insets(250, 120, 250, 120));
         cast1.setBackground(Background.EMPTY);
         cast1.setOnAction(e -> setUpMain(primaryStage, Warrior.class));
 
 
-        Button cast2 = new Button("Rouge");
-        cast2.setPadding(new Insets(250, 100, 250, 100));
+        Button cast2 = new Button("");
+        cast2.setPadding(new Insets(250, 120, 250, 120));
         cast2.setBackground(Background.EMPTY);
         cast2.setOnAction(e -> setUpMain(primaryStage, Rouge.class));
 
-        Button cast3 = new Button("Mage");
+        Button cast3 = new Button("");
         cast3.setBackground(Background.EMPTY);
-        cast3.setPadding(new Insets(250, 100, 250, 100));
+        cast3.setPadding(new Insets(250, 120, 250, 120));
 
         cast3.setOnAction(e -> setUpMain(primaryStage, Mage.class));
 
         // Create the HBox
         HBox buttonBox = new HBox();
-        buttonBox.setPadding(new Insets(0, 25, 0, 25));
+        buttonBox.setPadding(new Insets(0, 30, 0, 25));
         // Add the children to the HBox
         buttonBox.getChildren().addAll(cast1, cast2, cast3);
         // Set the vertical spacing between children to 15px
-        buttonBox.setSpacing(0);
+        buttonBox.setSpacing(10);
 
         // Create the VBox
         VBox root = new VBox();
         FileInputStream file = null;
         try {
-            file = new FileInputStream("src/main/resources/castselect.png");
+            file = new FileInputStream("src/main/resources/charselect.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
