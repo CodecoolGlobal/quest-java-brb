@@ -17,6 +17,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -36,6 +37,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.stage.StageStyle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +59,6 @@ public class Main extends Application {
     Label combatingLabel = new Label();
     Label powerLabel = new Label();
     GridPane ui = new GridPane();
-    TableView table = new TableView();
     ListView<String> inventoryList;
     ListView<String> shopList;
     Stage mainStage;
@@ -72,6 +73,7 @@ public class Main extends Application {
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("KEY", Key.class);
         put("HEALTHPOTION", HealthPotion.class);
+        put("SHOVEL", Shovel.class);
     }};
     // slow moving enemies
     Timeline slowTimeline = new Timeline(
@@ -125,19 +127,19 @@ public class Main extends Application {
         setSpellProgress();
         setUpBank();
         setUpShop();
-
+        restockShop();
         ui.setGridLinesVisible(false);
         ui.setVgap(3);
 
         Label dura = new Label("Durability:");
 
-        ui.add(dura, 0, 5);
+        ui.add(dura, 0, 6);
         setLabelStyle(dura, 15);
-        ui.add(helmetDurability, 0, 7);
+        ui.add(helmetDurability, 0, 8);
         setLabelStyle(helmetDurability, 14);
-        ui.add(shieldDurability, 0, 8);
+        ui.add(shieldDurability, 0, 9);
         setLabelStyle(shieldDurability, 14);
-        ui.add(weaponDurability, 0, 6);
+        ui.add(weaponDurability, 0, 7);
         setLabelStyle(weaponDurability, 14);
 
         Label defense = new Label("Defense: ");
@@ -168,7 +170,7 @@ public class Main extends Application {
 
     public void setSpellProgress() {
         Label pogressLabel = new Label("Spell Cooldown: ");
-        setLabelStyle(pogressLabel,14);
+        setLabelStyle(pogressLabel, 14);
         ui.add(pogressLabel, 0, 13);
         ui.add(pi, 1, 13);
     }
@@ -178,11 +180,15 @@ public class Main extends Application {
         ui.setPadding(new Insets(10));
     }
 
-    public void setUpBank(){
+    public void setUpBank() {
         Label bank = new Label("Coins: ");
-        setLabelStyle(bank,14);
-        ui.add(bank,0,17);
-        ui.add(coins,1,17);
+        setLabelStyle(bank, 15);
+        ui.add(bank, 0, 3);
+        ui.add(coins, 1, 3);
+        setLabelStyle(coins, 15);
+        bank.setTextFill(Color.rgb(193, 183, 0));
+        coins.setTextFill(Color.rgb(204, 183, 49));
+        coins.setEffect(new Glow(0.5));
     }
 
 
@@ -272,7 +278,7 @@ public class Main extends Application {
 
     public void setUpInventory() {
         Label inventory = new Label("Inventory:");
-        ui.add(inventory, 0, 3);
+        ui.add(inventory, 0, 4);
         setLabelStyle(inventory, 15);
         inventory.setTextFill((Color.SLATEBLUE));
         inventoryList = new ListView<>(inventoryLabels);
@@ -280,23 +286,45 @@ public class Main extends Application {
         inventoryList.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
-        ui.add(inventoryList, 0, 4);
+        ui.add(inventoryList, 0, 5);
+    }
+
+    public void restockShop() {
+        shopItemLabels.clear();
+        for (int i = 0; i < 5; i++) {
+            shopItemLabels.add(ShopItems.getRandomShopItem());
+        }
     }
 
     public void setUpShop() {
-        shopItemLabels.clear();
-        for(int i= 0;i<5;i++){
-            shopItemLabels.add(ItemTypes.getRandomItem().getSimpleName());
-        }
-        shopLabel.setText("Shop:");
+        shopLabel.setText("Shop:\n  Price    Item");
         ui.add(shopLabel, 0, 19);
         setLabelStyle(shopLabel, 14);
         shopLabel.setTextFill((Color.SLATEBLUE));
         shopList = new ListView<>(shopItemLabels);
-        shopList.setPrefSize(170, 150);
+        shopList.setPrefSize(180, 160);
+        shopList.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) buyItem();
+        });
         ui.add(shopList, 0, 20);
         shopList.setVisible(false);
         shopLabel.setVisible(false);
+    }
+
+    private void buyItem() {
+        String choosenItem = shopList.getSelectionModel().getSelectedItem().toUpperCase().split("   ")[1];
+        System.out.println(choosenItem);
+        if (ShopItems.valueOf(choosenItem).getWorth() <= map.getPlayer().getBank()) {
+            shopItemLabels.remove(shopList.getSelectionModel().getSelectedItem());
+            map.getPlayer().withdrawFromBank(ShopItems.valueOf(choosenItem).getWorth());
+            try {
+                ItemTypes.valueOf(choosenItem).getItemName().getConstructor(Cell.class).newInstance(map.getPlayer().getCell());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            map.getPlayer().pickUp();
+            updateInventory();
+        }
     }
 
     public void setUpCombatLogs() {
@@ -305,6 +333,8 @@ public class Main extends Application {
         setLabelStyle(combat, 15);
         ui.add(combatingLabel, 0, 15);
         setLabelStyle(combatingLabel, 13);
+        combatingLabel.setMinHeight(200);
+        combatingLabel.setAlignment(Pos.TOP_LEFT);
     }
 
     public void startAllMovement() {
@@ -323,7 +353,8 @@ public class Main extends Application {
     }
 
     private void itemUsed() {
-        map.getPlayer().useItem(itemTypes.get(inventoryList.getSelectionModel().getSelectedItem()));
+        Class<?> item = itemTypes.get(inventoryList.getSelectionModel().getSelectedItem());
+        map.getPlayer().useItem(item);
         refresh();
         updateInventory();
     }
@@ -353,10 +384,8 @@ public class Main extends Application {
 
         Optional<ButtonType> result = victory.showAndWait();
         if (result.get() == buttonNewGame) {
-            // user clicked "yes"
             restart();
         } else {
-            // user clicked "no" or closed the dialog
             mainStage.close();
         }
     }
@@ -376,10 +405,8 @@ public class Main extends Application {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonRestart) {
-            // ... user chose "restart"
             restart();
         } else {
-            // ... user chose quit or closed the dialog
             mainStage.close();
         }
     }
@@ -436,15 +463,13 @@ public class Main extends Application {
         }
         if (map.getPlayer().isShop()) {
             openShop();
-        }
-        else closeShop();
+        } else closeShop();
 
         if (map.getPlayer().isObjective()) {
             showVictoryAlert();
         }
         endGame();
     }
-
 
 
     private void closeShop() {
@@ -473,7 +498,7 @@ public class Main extends Application {
                 map.getHeight() * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
         bp.setCenter(canvas);
-        setUpShop();
+        restockShop();
     }
 
     private void moveSlowEnemies() {
@@ -563,7 +588,7 @@ public class Main extends Application {
 
     private void updateDurabilites() {
         try {
-            weaponDurability.setText("  Weapon: " + map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
+            weaponDurability.setText("  " + map.getPlayer().getWeapon().getClass().getSimpleName() + ": " + map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
         } catch (Exception e) {
             weaponDurability.setText("  No weapon");
         }
@@ -583,7 +608,7 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth() + "/" + map.getPlayer().getMaxHealth());
         powerLabel.setText("" + map.getPlayer().getPower());
         defenseLabel.setText("" + (100 - Math.round(map.getPlayer().getResi() * 100)));
-        coins.setText(""+ map.getPlayer().getBank());
+        coins.setText("" + map.getPlayer().getBank());
     }
 
 

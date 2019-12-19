@@ -7,6 +7,7 @@ public class Shield extends Armor {
 
     public Shield(Cell cell) {
         super(cell, 4, 0.2, Player::getShield, Player::setShield);
+        setWorth(3);
     }
 
     @Override

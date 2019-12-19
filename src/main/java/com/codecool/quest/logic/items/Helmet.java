@@ -7,6 +7,8 @@ public class Helmet extends Armor {
 
     public Helmet(Cell cell) {
         super(cell, 3, 0.15, Player::getHelmet, Player::setHelmet);
+        setWorth(4);
+
     }
 
     @Override

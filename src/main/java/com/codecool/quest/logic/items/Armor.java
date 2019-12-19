@@ -40,5 +40,6 @@ public abstract class Armor extends Armory{
         setMaxDurability(maxDurability);
         setDurability(getMaxDurability());
         setResi(resi);
+
     }
 }

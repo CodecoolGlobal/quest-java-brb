@@ -8,6 +8,7 @@ public class LaserPistol extends RangedWeapon {
         setPower(6);
         setMaxDurability(5);
         setDurability(getMaxDurability());
+        setWorth(8);
     }
 
     @Override

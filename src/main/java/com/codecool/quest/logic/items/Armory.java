@@ -7,6 +7,7 @@ public abstract class Armory extends Item{
     int durability;
     int maxDurability;
     Player player;
+    private int worth;
 
     public Player getPlayer() {
         return player;

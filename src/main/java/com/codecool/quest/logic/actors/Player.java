@@ -16,7 +16,7 @@ public abstract class Player extends Actor {
     private Armory boots;
     private Armory gloves;
     private Armory plate;
-    private int bank;
+    private int bank=10;
 
     public int getBank() {
         return bank;

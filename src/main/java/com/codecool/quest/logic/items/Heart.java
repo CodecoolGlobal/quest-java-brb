@@ -7,8 +7,10 @@ import com.codecool.quest.logic.actors.Player;
 public class Heart extends Item implements HealingItem{
     private int healPower = 30;
 
+
     public Heart(Cell cell) {
         super(cell);
+        setWorth(3);
     }
 
     @Override

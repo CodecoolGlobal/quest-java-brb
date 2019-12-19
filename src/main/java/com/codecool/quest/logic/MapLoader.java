@@ -56,6 +56,7 @@ public class MapLoader {
                             break;
                         case '$':
                             cell.setType(CellType.SHOP);
+                            break;
                         case '_':
                             cell.setType(CellType.DIGGABLE);
                             break;

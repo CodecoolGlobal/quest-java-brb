@@ -8,6 +8,7 @@ public abstract class Consumable extends Item{
         super(cell);
     }
 
+
     public abstract void use(Player player);
 
     @Override
