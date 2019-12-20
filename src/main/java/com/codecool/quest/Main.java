@@ -70,6 +70,9 @@ public class Main extends Application {
     Label shopLabel = new Label();
     Label coins = new Label();
     Label defenseLabel = new Label();
+    Armory savedweapon;
+    Helmet savedhelmet;
+    Shield savedshield;
     ProgressIndicator pi = new ProgressIndicator(0);
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("KEY", Key.class);
@@ -517,12 +520,18 @@ public class Main extends Application {
     }
 
     private void saveInventory() {
+        savedhelmet = map.getPlayer().getHelmet();
+        savedshield = map.getPlayer().getShield();
+        savedweapon = map.getPlayer().getWeapon();
         playerInventory = (ArrayList<Consumable>) map.getPlayer().getInventory();
 
     }
 
     private void loadInventory() {
         map.getPlayer().setInventory(playerInventory);
+        map.getPlayer().setHelmet(savedhelmet);
+        map.getPlayer().setShield(savedshield);
+        map.getPlayer().setWeapon(savedweapon);
     }
 
     private void moveSlowEnemies() {
