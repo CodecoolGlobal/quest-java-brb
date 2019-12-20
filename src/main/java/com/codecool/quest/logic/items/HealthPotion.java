@@ -8,8 +8,8 @@ public class HealthPotion extends Consumable implements HealingItem{
 
     public HealthPotion(Cell cell) {
         super(cell);
+        setWorth(4);
     }
-
 
 
     @Override

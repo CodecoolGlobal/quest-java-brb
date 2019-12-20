@@ -3,17 +3,19 @@ package com.codecool.quest.logic.items;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.actors.Player;
 
-public abstract class Consumable extends Item{
-    public Consumable(Cell cell) {
+public class CoinPile extends Item {
+    private int worth = 5;
+    public CoinPile(Cell cell) {
         super(cell);
     }
 
-
-    public abstract void use(Player player);
-
     @Override
     public void pickedUp(Player player) {
-        player.getInventory().add(this);
+        player.addToBank(worth);
     }
 
+    @Override
+    public String getTileName() {
+        return "coinPile";
+    }
 }

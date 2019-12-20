@@ -4,6 +4,7 @@ import com.codecool.quest.Main.*;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.items.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,37 @@ public abstract class Player extends Actor {
     private Armory boots;
     private Armory gloves;
     private Armory plate;
+    private int bank=10;
+
+    public int getBank() {
+        return bank;
+    }
+
+    public void withdrawFromBank(int amountToWithdraw){
+        this.bank -= amountToWithdraw;
+    }
+
+    public void addToBank(int amountToAdd){
+        this.bank += amountToAdd;
+    }
+    private Instant spellLastUsed = Instant.now();
+    private int spellCooldown;
+
+    public int getSpellCooldown() {
+        return spellCooldown;
+    }
+
+    public void setSpellCooldown(int spellCooldown) {
+        this.spellCooldown = spellCooldown;
+    }
+
+    public void setSpellLastUsed(Instant spellLastUsed) {
+        this.spellLastUsed = spellLastUsed;
+    }
+
+    public Instant getSpellLastUsed() {
+        return spellLastUsed;
+    }
 
     public boolean isArmored() {
         return getShield() != null || getBoots() != null || getGloves() != null || getPlate() != null || getHelmet() != null;
@@ -147,4 +179,6 @@ public abstract class Player extends Actor {
     public abstract void castSpell();
 
     public abstract String getTileName();
+
+    public boolean isShop() {return this.getCell().getTileName().equals("shop"); }
 }

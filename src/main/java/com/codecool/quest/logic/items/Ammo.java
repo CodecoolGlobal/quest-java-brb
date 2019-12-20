@@ -1,5 +1,6 @@
 package com.codecool.quest.logic.items;
 
+import com.codecool.quest.Main;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.Drawable;
 import com.codecool.quest.logic.actors.Actor;
@@ -54,6 +55,10 @@ public abstract class Ammo implements Drawable {
            this.getCell().setAmmo(null);
            if(this.getCell().getActor() instanceof Enemy){
                Actor enemy = this.getCell().getActor();
+
+               enemy.setTileName("hurt"+enemy.getBaseTileName());
+               Main.setTimeout(()->enemy.setTileName(enemy.getBaseTileName()),250);
+
                enemy.setHealth(enemy.getHealth()-damage);
                if(enemy.isDead()) enemy.die();
            }

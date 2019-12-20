@@ -3,16 +3,21 @@ package com.codecool.quest.logic.actors;
 import com.codecool.quest.Main;
 import com.codecool.quest.logic.Cell;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Warrior extends Player{
+public class Warrior extends Player {
+
+
     public Warrior(Cell cell) {
         super(cell);
         setMaxHealth(75);
         setBasePower(10);
         setPower(getBasePower());
         setHealth(getMaxHealth());
+        setSpellCooldown(12000);
     }
 
     @Override
@@ -22,25 +27,32 @@ public class Warrior extends Player{
 
     @Override
     public void castSpell() {
-        List<Enemy> enemies = new ArrayList<>();
-        List<String> names = new ArrayList<>();
+        if (Duration.between(getSpellLastUsed(), Instant.now()).toSeconds() >= getSpellCooldown()) {
 
-        getCell().getAllNeighbors().forEach((cell -> {
-            if (cell.getActor() instanceof Enemy) {
-                Actor enemy = cell.getActor();
-                enemies.add((Enemy) enemy);
-                names.add(enemy.getTileName());
-                enemy.setTileName("hurt" + enemy.getTileName());
+            List<Enemy> enemies = new ArrayList<>();
+            List<String> names = new ArrayList<>();
 
-                enemy.setHealth(enemy.getHealth() - getPower()/2);
-                if (enemy.isDead()) enemy.die();
-            }
+            getCell().getAllNeighbors().forEach((cell -> {
+                if (cell.getActor() instanceof Enemy) {
+                    Actor enemy = cell.getActor();
+                    enemies.add((Enemy) enemy);
+                    names.add(enemy.getTileName());
+                    enemy.setTileName("hurt" + enemy.getTileName());
 
-        }));
-        Main.setTimeout(() -> {
-            for (int i = 0; i < enemies.size(); i++) {
-                enemies.get(i).setTileName(names.get(i));
-            }
-        }, 250);
+                    enemy.setHealth(enemy.getHealth() - getPower() / 2);
+                    if (enemy.isDead()) enemy.die();
+                }
+
+
+            }));
+            Main.setTimeout(() -> {
+                for (int i = 0; i < enemies.size(); i++) {
+                    enemies.get(i).setTileName(names.get(i));
+                }
+            }, 250);
+        setSpellLastUsed(Instant.now());
+
+        }
+
     }
 }

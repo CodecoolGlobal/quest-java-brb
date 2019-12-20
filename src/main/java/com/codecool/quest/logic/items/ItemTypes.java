@@ -10,7 +10,9 @@ public enum ItemTypes {
     SHIELD(Shield.class),
     AXE(Axe.class),
     BOW(Bow.class),
-    CROSSBOW(Crossbow.class);
+    CROSSBOW(Crossbow.class),
+    COIN(Coin.class),
+    COINPILE(CoinPile.class);
 
 
     private final Class itemName;

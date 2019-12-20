@@ -8,6 +8,7 @@ public class Axe extends Weapon{
         setPower(20);
         setMaxDurability(3);
         setDurability(getMaxDurability());
+        setWorth(5);
     }
 
 

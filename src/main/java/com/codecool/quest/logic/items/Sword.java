@@ -8,6 +8,7 @@ public class Sword extends Weapon{
         setPower(10);
         setMaxDurability(4);
         setDurability(getMaxDurability());
+        setWorth(2);
     }
 
     @Override

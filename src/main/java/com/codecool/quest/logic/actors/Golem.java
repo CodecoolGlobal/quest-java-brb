@@ -8,6 +8,7 @@ public class Golem extends Enemy{
         setHealth(200);
         setPower(50);
         setTileName("golem");
+        setBaseTileName(tileName);
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.codecool.quest.logic.MapLoader;
 import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.*;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.Math;
@@ -17,9 +16,8 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,8 +28,6 @@ import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -43,6 +39,7 @@ import javafx.stage.StageStyle;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -63,13 +60,17 @@ public class Main extends Application {
     Label combatingLabel = new Label();
     Label powerLabel = new Label();
     GridPane ui = new GridPane();
-    ListView<String> list;
+    ListView<String> inventoryList;
+    ListView<String> shopList;
     Stage mainStage;
     BorderPane bp;
     Label weaponDurability = new Label();
     Label helmetDurability = new Label();
     Label shieldDurability = new Label();
+    Label shopLabel = new Label();
+    Label coins = new Label();
     Label defenseLabel = new Label();
+    ProgressIndicator pi = new ProgressIndicator(0);
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("KEY", Key.class);
         put("HEALTHPOTION", HealthPotion.class);
@@ -88,8 +89,18 @@ public class Main extends Application {
             new KeyFrame(Duration.seconds(0.2), e -> moveBullets())
     );
 
+    Timeline veryfast = new Timeline(
+            new KeyFrame(Duration.seconds(0.01), e -> updateSpellProgress())
+    );
+
+    private void updateSpellProgress() {
+        pi.setProgress((double) java.time.Duration.between(map.getPlayer().getSpellLastUsed(), Instant.now()).toMillis() / map.getPlayer().getSpellCooldown());
+    }
+
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
     private static ArrayList<Consumable> playerInventory = new ArrayList<>();
+    private ObservableList<String> shopItemLabels = FXCollections.observableArrayList();
+
 
     private static String[] levels = {"/level1.txt", "/level2.txt", "/level3.txt"};
     private static String[] caves = {"/cave1.txt", "/cave2.txt", "/cave3.txt"};
@@ -116,18 +127,22 @@ public class Main extends Application {
         setUpPower();
         setUpInventory();
         setUpCombatLogs();
+        setSpellProgress();
+        setUpBank();
+        setUpShop();
+        restockShop();
         ui.setGridLinesVisible(false);
         ui.setVgap(3);
 
         Label dura = new Label("Durability:");
 
-        ui.add(dura, 0, 5);
+        ui.add(dura, 0, 6);
         setLabelStyle(dura, 15);
-        ui.add(helmetDurability, 0, 7);
+        ui.add(helmetDurability, 0, 8);
         setLabelStyle(helmetDurability, 14);
-        ui.add(shieldDurability, 0, 8);
+        ui.add(shieldDurability, 0, 9);
         setLabelStyle(shieldDurability, 14);
-        ui.add(weaponDurability, 0, 6);
+        ui.add(weaponDurability, 0, 7);
         setLabelStyle(weaponDurability, 14);
 
         Label defense = new Label("Defense: ");
@@ -140,6 +155,7 @@ public class Main extends Application {
         defenseLabel.setEffect(new Glow(0.5));
         BorderPane borderPane = new BorderPane();
         bp = borderPane;
+
         borderPane.setCenter(canvas);
         borderPane.setRight(ui);
 
@@ -155,43 +171,62 @@ public class Main extends Application {
         startAllMovement();
     }
 
+    public void setSpellProgress() {
+        Label pogressLabel = new Label("Spell Cooldown: ");
+        setLabelStyle(pogressLabel, 14);
+        ui.add(pogressLabel, 0, 13);
+        ui.add(pi, 1, 13);
+    }
+
     public void setUpWindow() {
         ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
     }
 
+    public void setUpBank() {
+        Label bank = new Label("Coins: ");
+        setLabelStyle(bank, 15);
+        ui.add(bank, 0, 3);
+        ui.add(coins, 1, 3);
+        setLabelStyle(coins, 15);
+        bank.setTextFill(Color.rgb(193, 183, 0));
+        coins.setTextFill(Color.rgb(204, 183, 49));
+        coins.setEffect(new Glow(0.5));
+    }
+
+
     public void setUpCharacterSelect(Stage primaryStage) {
 
-        Button cast1 = new Button("Warrior");
-        cast1.setPadding(new Insets(250, 100, 250, 100));
+        Button cast1 = new Button("");
+        cast1.setPadding(new Insets(250, 120, 250, 120));
         cast1.setBackground(Background.EMPTY);
         cast1.setOnAction(e -> setUpMain(primaryStage, Warrior.class));
 
 
-        Button cast2 = new Button("Rouge");
-        cast2.setPadding(new Insets(250, 100, 250, 100));
+        Button cast2 = new Button("");
+        cast2.setPadding(new Insets(250, 120, 250, 120));
         cast2.setBackground(Background.EMPTY);
         cast2.setOnAction(e -> setUpMain(primaryStage, Rouge.class));
 
-        Button cast3 = new Button("Mage");
+        Button cast3 = new Button("");
         cast3.setBackground(Background.EMPTY);
-        cast3.setPadding(new Insets(250, 100, 250, 100));
+        cast3.setPadding(new Insets(250, 120, 250, 120));
 
         cast3.setOnAction(e -> setUpMain(primaryStage, Mage.class));
 
         // Create the HBox
         HBox buttonBox = new HBox();
-        buttonBox.setPadding(new Insets(0, 25, 0, 25));
+        buttonBox.setPadding(new Insets(0, 30, 0, 25));
         // Add the children to the HBox
         buttonBox.getChildren().addAll(cast1, cast2, cast3);
         // Set the vertical spacing between children to 15px
-        buttonBox.setSpacing(0);
+        buttonBox.setSpacing(10);
 
         // Create the VBox
         VBox root = new VBox();
         FileInputStream file = null;
         try {
-            file = new FileInputStream("src/main/resources/castselect.png");
+            file = new FileInputStream("src/main/resources/charselect.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -246,15 +281,53 @@ public class Main extends Application {
 
     public void setUpInventory() {
         Label inventory = new Label("Inventory:");
-        ui.add(inventory, 0, 3);
+        ui.add(inventory, 0, 4);
         setLabelStyle(inventory, 15);
         inventory.setTextFill((Color.SLATEBLUE));
-        list = new ListView<>(inventoryLabels);
-        list.setPrefSize(170, 90);
-        list.setOnKeyPressed(key -> {
+        inventoryList = new ListView<>(inventoryLabels);
+        inventoryList.setPrefSize(170, 90);
+        inventoryList.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) itemUsed();
         });
-        ui.add(list, 0, 4);
+        ui.add(inventoryList, 0, 5);
+    }
+
+    public void restockShop() {
+        shopItemLabels.clear();
+        for (int i = 0; i < 5; i++) {
+            shopItemLabels.add(ShopItems.getRandomShopItem());
+        }
+    }
+
+    public void setUpShop() {
+        shopLabel.setText("Shop:\n  Price    Item");
+        ui.add(shopLabel, 0, 19);
+        setLabelStyle(shopLabel, 14);
+        shopLabel.setTextFill((Color.SLATEBLUE));
+        shopList = new ListView<>(shopItemLabels);
+        shopList.setPrefSize(180, 160);
+        shopList.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) buyItem();
+        });
+        ui.add(shopList, 0, 20);
+        shopList.setVisible(false);
+        shopLabel.setVisible(false);
+    }
+
+    private void buyItem() {
+        String choosenItem = shopList.getSelectionModel().getSelectedItem().toUpperCase().split("   ")[1];
+        System.out.println(choosenItem);
+        if (ShopItems.valueOf(choosenItem).getWorth() <= map.getPlayer().getBank()) {
+            shopItemLabels.remove(shopList.getSelectionModel().getSelectedItem());
+            map.getPlayer().withdrawFromBank(ShopItems.valueOf(choosenItem).getWorth());
+            try {
+                ItemTypes.valueOf(choosenItem).getItemName().getConstructor(Cell.class).newInstance(map.getPlayer().getCell());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            map.getPlayer().pickUp();
+            updateInventory();
+        }
     }
 
     public void setUpCombatLogs() {
@@ -263,15 +336,19 @@ public class Main extends Application {
         setLabelStyle(combat, 15);
         ui.add(combatingLabel, 0, 15);
         setLabelStyle(combatingLabel, 13);
+        combatingLabel.setMinHeight(200);
+        combatingLabel.setAlignment(Pos.TOP_LEFT);
     }
 
     public void startAllMovement() {
         slowTimeline.setCycleCount(Animation.INDEFINITE);
         fastTimeline.setCycleCount(Animation.INDEFINITE);
         bulletTimeline.setCycleCount(Animation.INDEFINITE);
+        veryfast.setCycleCount(Animation.INDEFINITE);
         slowTimeline.play();
         fastTimeline.play();
         bulletTimeline.play();
+        veryfast.play();
     }
 
     public void endGame() {
@@ -279,7 +356,7 @@ public class Main extends Application {
     }
 
     private void itemUsed() {
-        Class<?> item = itemTypes.get(list.getSelectionModel().getSelectedItem());
+        Class<?> item = itemTypes.get(inventoryList.getSelectionModel().getSelectedItem());
         map.getPlayer().useItem(item);
         if (item == Shovel.class && map.getPlayer().isDiggable()){
             dig();
@@ -313,10 +390,8 @@ public class Main extends Application {
 
         Optional<ButtonType> result = victory.showAndWait();
         if (result.get() == buttonNewGame) {
-            // user clicked "yes"
             restart();
         } else {
-            // user clicked "no" or closed the dialog
             mainStage.close();
         }
     }
@@ -336,10 +411,8 @@ public class Main extends Application {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonRestart) {
-            // ... user chose "restart"
             restart();
         } else {
-            // ... user chose quit or closed the dialog
             mainStage.close();
         }
     }
@@ -399,7 +472,11 @@ public class Main extends Application {
         else if (map.getPlayer().isObjective()) {
             showVictoryAlert();
         }
-        else if (map.getPlayer().isExitCave()) {
+        if (map.getPlayer().isShop()) {
+            openShop();
+        } else closeShop();
+
+        if (map.getPlayer().isExitCave()) {
             returnToLevel();
         }
         endGame();
@@ -411,6 +488,17 @@ public class Main extends Application {
         loadInventory();
     }
 
+    private void closeShop() {
+        shopList.setVisible(false);
+        shopLabel.setVisible(false);
+
+    }
+
+    private void openShop() {
+        shopList.setVisible(true);
+        shopLabel.setVisible(true);
+    }
+
     private void onKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.SHIFT) {
             shooting = false;
@@ -418,16 +506,19 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
+
         map = MapLoader.loadMap(level, playerCast);
         canvas = new Canvas(
                 map.getWidth() * Tiles.TILE_WIDTH,
                 map.getHeight() * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
         bp.setCenter(canvas);
+        restockShop();
     }
 
     private void saveInventory() {
-        playerInventory.addAll(map.getPlayer().getInventory());
+        playerInventory = (ArrayList<Consumable>) map.getPlayer().getInventory();
+
     }
 
     private void loadInventory() {
@@ -521,7 +612,7 @@ public class Main extends Application {
 
     private void updateDurabilites() {
         try {
-            weaponDurability.setText("  Weapon: " + map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
+            weaponDurability.setText("  " + map.getPlayer().getWeapon().getClass().getSimpleName() + ": " + map.getPlayer().getWeapon().getMaxDurability() + "/" + map.getPlayer().getWeapon().getDurability());
         } catch (Exception e) {
             weaponDurability.setText("  No weapon");
         }
@@ -541,7 +632,9 @@ public class Main extends Application {
         healthLabel.setText("" + map.getPlayer().getHealth() + "/" + map.getPlayer().getMaxHealth());
         powerLabel.setText("" + map.getPlayer().getPower());
         defenseLabel.setText("" + (100 - Math.round(map.getPlayer().getResi() * 100)));
+        coins.setText("" + map.getPlayer().getBank());
     }
+
 
     private void updateUI() {
         updateLabels();

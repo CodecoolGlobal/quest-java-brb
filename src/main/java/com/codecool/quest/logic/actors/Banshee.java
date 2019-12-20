@@ -11,8 +11,10 @@ public class Banshee extends Enemy {
 
     public Banshee(Cell cell, GameMap map) {
         super(cell, "slow");
-        setHealth(15);
-        setBasePower(45);
+        setHealth(6);
+        setBasePower(2);
+        setTileName("banshee");
+        setBaseTileName(tileName);
         this.map = map;
     }
 
@@ -27,9 +29,10 @@ public class Banshee extends Enemy {
         }
     }
 
-    @Override
+
+        @Override
     public String getTileName() {
-        return "banshee";
+        return tileName;
     }
 
     @Override

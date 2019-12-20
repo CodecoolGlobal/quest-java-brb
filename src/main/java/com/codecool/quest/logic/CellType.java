@@ -9,6 +9,8 @@ public enum CellType {
     STAIRS("stairs"),
     WATEREDGE("wateredge"),
     OBJECTIVE("objective"),
+    WALL("wall"),
+    SHOP("shop"),
     PLACEHOLDER("placeholder"),
     DIGGABLE("diggable"),
     CENTERWATER("centerwater"),
@@ -30,8 +32,8 @@ public enum CellType {
     TOPEDGECAVE("topedgecave"),
     LEFTEDGECAVE("leftedgecave"),
     RIGHTEDGECAVE("rightedgecave"),
-    BOTTOMEDGECAVE("bottomedgecave"),
-    WALL("wall");
+    BOTTOMEDGECAVE("bottomedgecave");
+
 
     private final String tileName;
 

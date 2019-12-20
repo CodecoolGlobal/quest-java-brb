@@ -54,6 +54,9 @@ public class MapLoader {
                         case '-':
                             cell.setType(CellType.WATEREDGE);
                             break;
+                        case '$':
+                            cell.setType(CellType.SHOP);
+                            break;
                         case '_':
                             cell.setType(CellType.DIGGABLE);
                             break;
