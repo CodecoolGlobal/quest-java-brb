@@ -10,7 +10,9 @@ public class Shovel extends Consumable {
 
     @Override
     public void use(Player player) {
-        player.removeFromInventory(this);
+        if(player.getCell().getTileName().equals("diggable")) {
+            player.removeFromInventory(this);
+        }
     }
 
     @Override

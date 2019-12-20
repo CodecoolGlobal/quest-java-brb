@@ -124,7 +124,71 @@ public class MapLoader {
                             new Bow(cell);
                             break;
 
-                            // objective
+                            // lake
+                        case '0':
+                            cell.setType(CellType.CENTERWATER);
+                            break;
+                        case '1':
+                            cell.setType(CellType.TOPLEFTWATER);
+                            break;
+                        case '2':
+                            cell.setType(CellType.TOPRIGHTWATER);
+                            break;
+                        case '3':
+                            cell.setType(CellType.BOTTOMLEFTWATER);
+                            break;
+                        case '4':
+                            cell.setType(CellType.BOTTOMRIGHTWATER);
+                            break;
+                        case '5':
+                            cell.setType(CellType.TOPWATEREDGE);
+                            break;
+                        case '6':
+                            cell.setType(CellType.LEFTWATEREDGE);
+                            break;
+                        case '7':
+                            cell.setType(CellType.RIGHTWATEREDGE);
+                            break;
+                        case '8':
+                            cell.setType(CellType.BOTTOMWATEREDGE);
+                            break;
+
+                            // cave
+                        case '+':
+                            cell.setType(CellType.DARKNESS);
+                            break;
+                        case '?':
+                            cell.setType(CellType.CENTERCAVE);
+                            break;
+                        case '!':
+                            cell.setType(CellType.EXITCAVE);
+                            break;
+                        case '%':
+                            cell.setType(CellType.TOPLEFTCAVE);
+                            break;
+                        case '=':
+                            cell.setType(CellType.TOPRIGHTCAVE);
+                            break;
+                        case '(':
+                            cell.setType(CellType.BOTTOMLEFTCAVE);
+                            break;
+                        case ')':
+                            cell.setType(CellType.BOTTOMRIGHTCAVE);
+                            break;
+                        case ':':
+                            cell.setType(CellType.TOPEDGECAVE);
+                            break;
+                        case ';':
+                            cell.setType(CellType.LEFTEDGECAVE);
+                            break;
+                        case '¤':
+                            cell.setType(CellType.RIGHTEDGECAVE);
+                            break;
+                        case '×':
+                            cell.setType(CellType.BOTTOMEDGECAVE);
+                            break;
+
+                           // objective
                         case 'W':
                             cell.setType(CellType.OBJECTIVE);
                             break;

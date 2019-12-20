@@ -42,6 +42,7 @@ import javafx.util.Duration;
 import javafx.stage.StageStyle;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,7 @@ public class Main extends Application {
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("KEY", Key.class);
         put("HEALTHPOTION", HealthPotion.class);
+        put("SHOVEL", Shovel.class);
     }};
     // slow moving enemies
     Timeline slowTimeline = new Timeline(
@@ -87,8 +89,10 @@ public class Main extends Application {
     );
 
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
+    private static ArrayList<Consumable> playerInventory = new ArrayList<>();
 
     private static String[] levels = {"/level1.txt", "/level2.txt", "/level3.txt"};
+    private static String[] caves = {"/cave1.txt", "/cave2.txt", "/cave3.txt"};
     private static int nextLevel = 0;
 
     public static void main(String[] args) {
@@ -275,7 +279,11 @@ public class Main extends Application {
     }
 
     private void itemUsed() {
-        map.getPlayer().useItem(itemTypes.get(list.getSelectionModel().getSelectedItem()));
+        Class<?> item = itemTypes.get(list.getSelectionModel().getSelectedItem());
+        map.getPlayer().useItem(item);
+        if (item == Shovel.class && map.getPlayer().isDiggable()){
+            dig();
+        }
         refresh();
         updateInventory();
     }
@@ -384,14 +392,23 @@ public class Main extends Application {
         }
         refresh();
         if (map.getPlayer().isStairs()) {
-
+            saveInventory();
             setStage(levels[++nextLevel]);
+            loadInventory();
         }
-
-        if (map.getPlayer().isObjective()) {
+        else if (map.getPlayer().isObjective()) {
             showVictoryAlert();
         }
+        else if (map.getPlayer().isExitCave()) {
+            returnToLevel();
+        }
         endGame();
+    }
+
+    private void returnToLevel() {
+        saveInventory();
+        setStage(levels[nextLevel]);
+        loadInventory();
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
@@ -407,6 +424,14 @@ public class Main extends Application {
                 map.getHeight() * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
         bp.setCenter(canvas);
+    }
+
+    private void saveInventory() {
+        playerInventory.addAll(map.getPlayer().getInventory());
+    }
+
+    private void loadInventory() {
+        map.getPlayer().setInventory(playerInventory);
     }
 
     private void moveSlowEnemies() {
@@ -522,6 +547,12 @@ public class Main extends Application {
         updateLabels();
         updateDurabilites();
         updateNearbyEnemies();
+    }
+
+    private void dig() {
+        saveInventory();
+        setStage(caves[(int) Tiles.getRandomIntegerBetweenRange(0, caves.length - 1)]);
+        loadInventory();
     }
 
     public static void setTimeout(Runnable runnable, int delay) {

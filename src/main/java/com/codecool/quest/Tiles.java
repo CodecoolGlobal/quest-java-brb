@@ -38,6 +38,26 @@ public class Tiles {
         tileMap.put("objective", new Tile(12, 24));
         tileMap.put("placeholder", new Tile(12, 10));
         tileMap.put("diggable", new Tile(12, 18));
+        tileMap.put("centerwater", new Tile(8, 5));
+        tileMap.put("topleftwater", new Tile(20, 30));
+        tileMap.put("toprightwater", new Tile(21, 30));
+        tileMap.put("bottomleftwater", new Tile(20, 31));
+        tileMap.put("bottomrightwater", new Tile(21, 31));
+        tileMap.put("topwateredge", new Tile(23, 31));
+        tileMap.put("leftwateredge", new Tile(22, 30));
+        tileMap.put("rightwateredge", new Tile(23, 30));
+        tileMap.put("bottomwateredge", new Tile(22, 31));
+        tileMap.put("darkness", new Tile(0, 0));
+        tileMap.put("centercave", new Tile(28, 30));
+        tileMap.put("exitcave", new Tile(28, 31));
+        tileMap.put("topleftcave", new Tile(24, 30));
+        tileMap.put("toprightcave", new Tile(25, 30));
+        tileMap.put("bottomleftcave", new Tile(24, 31));
+        tileMap.put("bottomrightcave", new Tile(25, 31));
+        tileMap.put("topedgecave", new Tile(27, 31));
+        tileMap.put("leftedgecave", new Tile(26, 30));
+        tileMap.put("rightedgecave", new Tile(27, 30));
+        tileMap.put("bottomedgecave", new Tile(26, 31));
 
         //CHARACTERS
         tileMap.put("warrior", new Tile(25, 0));

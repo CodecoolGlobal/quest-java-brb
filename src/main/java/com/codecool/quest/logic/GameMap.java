@@ -81,8 +81,6 @@ public class GameMap {
         return player;
     }
 
-    public Skeleton getSkeleton() { return skeleton; }
-
     public int getWidth() {
         return width;
     }

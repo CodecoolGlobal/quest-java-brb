@@ -24,7 +24,15 @@ public class Cell implements Drawable {
     public boolean isObstacle() {
         return this.getTileName().equals("wall")
                 || this.getActor() != null
-                || this.getTileName().equals("closeddoor");
+                || this.getTileName().equals("closeddoor")
+                || this.getTileName().equals("topedgecave")
+                || this.getTileName().equals("leftedgecave")
+                || this.getTileName().equals("rightedgecave")
+                || this.getTileName().equals("bottomedgecave")
+                || this.getTileName().equals("topleftgecave")
+                || this.getTileName().equals("toprightcave")
+                || this.getTileName().equals("bottomleftcave")
+                || this.getTileName().equals("bottomrightcave");
     }
 
     public void setItem(Item item) {

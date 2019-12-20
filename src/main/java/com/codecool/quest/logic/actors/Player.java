@@ -1,6 +1,6 @@
 package com.codecool.quest.logic.actors;
 
-import com.codecool.quest.Main;
+import com.codecool.quest.Main.*;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.items.*;
 
@@ -81,6 +81,11 @@ public abstract class Player extends Actor {
         return inventory;
     }
 
+    public void setInventory(List<Consumable> inventory) {
+        this.inventory = inventory;
+    }
+
+
     public Consumable inventoryGetItem(Class<?> type) {
         for (Consumable item : getInventory()) {
             if (item.getClass().equals(type)) return item;
@@ -121,6 +126,14 @@ public abstract class Player extends Actor {
         if (this.hasItem(type)) {
             inventoryGetItem(type).use(this);
         }
+    }
+
+    public boolean isExitCave() {
+        return this.getCell().getTileName().equals("exitcave");
+    }
+
+    public boolean isDiggable() {
+        return this.getCell().getTileName().equals("diggable");
     }
 
     public boolean isStairs() {
