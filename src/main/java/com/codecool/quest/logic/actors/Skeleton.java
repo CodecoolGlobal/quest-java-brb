@@ -10,9 +10,4 @@ public class Skeleton extends Enemy {
         setTileName("skeleton");
         setBaseTileName(tileName);
     }
-
-    @Override
-    public String getTileName() {
-        return tileName;
-    }
 }

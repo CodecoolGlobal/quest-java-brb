@@ -10,9 +10,4 @@ public class Monster extends Enemy{
         setTileName("monster");
         setBaseTileName(tileName);
     }
-
-    @Override
-    public String getTileName() {
-        return tileName;
-    }
 }

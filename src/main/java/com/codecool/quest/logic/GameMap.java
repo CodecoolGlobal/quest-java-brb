@@ -81,6 +81,12 @@ public class GameMap {
         return player;
     }
 
+    public void movePlayeToCell(Cell destination){
+        getPlayer().getCell().setActor(null);
+        destination.setActor(getPlayer());
+        getPlayer().setCell(destination);
+    }
+
     public int getWidth() {
         return width;
     }

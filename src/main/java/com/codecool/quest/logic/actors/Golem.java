@@ -12,11 +12,6 @@ public class Golem extends Enemy{
     }
 
     @Override
-    public String getTileName() {
-        return tileName;
-    }
-
-    @Override
     public void move(int dx, int dy) {
     }
 }
