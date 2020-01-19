@@ -95,7 +95,7 @@ public class Main extends Application {
     //its basically only used by the cooldown timer
     Timeline veryfast = new Timeline(
             new KeyFrame(Duration.seconds(0.01), e -> {
-                refresh();
+                prorefresh();
                 updateSpellProgress();
             })
     );
@@ -123,8 +123,8 @@ public class Main extends Application {
         playerCast = choosenCast;
         map = MapLoader.loadMap(levels[nextLevel], choosenCast);
         canvas = new Canvas(
-                map.getWidth() * Tiles.TILE_WIDTH,
-                map.getHeight() * Tiles.TILE_WIDTH);
+                11 * Tiles.TILE_WIDTH,
+                11 * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
         setUpUi();
 
@@ -585,7 +585,7 @@ public class Main extends Application {
         }
         //refresh();
     }
-
+/*
     private void refresh() {
         System.out.println(savedPlayerPosition != null ? "X:"+savedPlayerPosition.getX()+"Y:"+savedPlayerPosition.getY() : "dunno");
         context.setFill(Color.BLACK);
@@ -602,6 +602,29 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getAmmo(), x, y);
                 } else {
                     Tiles.drawTile(context, cell, x, y);
+                }
+            }
+        }
+        updateUI();
+    }
+*/
+    private void prorefresh() {
+        int playerX = map.getPlayer().getX();
+        int playerY = map.getPlayer().getY();
+        context.setFill(Color.BLACK);
+        context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        Tiles.iterator = Tiles.greenery.listIterator();
+        for (int x = playerX-5; x < playerX+6; x++) {
+            for (int y = playerY-5; y < playerY+6; y++) {
+                Cell cell = map.getCell(x, y);
+                if (cell.getActor() != null) {
+                    Tiles.drawTile(context, cell.getActor(), x, y,playerX,playerY);
+                } else if (cell.getItem() != null) {
+                    Tiles.drawTile(context, cell.getItem(), x, y,playerX,playerY);
+                } else if (cell.getAmmo() != null) {
+                    Tiles.drawTile(context, cell.getAmmo(), x, y,playerX,playerY);
+                } else {
+                    Tiles.drawTile(context, cell, x, y,playerX,playerY);
                 }
             }
         }

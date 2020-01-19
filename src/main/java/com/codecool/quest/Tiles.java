@@ -104,7 +104,9 @@ public class Tiles {
     }
 
 
-    public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
+    public static void drawTile(GraphicsContext context, Drawable d, int x, int y,int playerX,int playerY) {
+        x -= playerX-5;
+        y -= playerY-5;
         Tile tile;
         if (d.getTileName().equals("greenery")) {
             tile = new Tile(iterator.next(), iterator.next());
