@@ -11,7 +11,7 @@ import java.util.*;
 public class Tiles {
     public static int TILE_WIDTH = 32;
 
-    private static Image tileset = new Image("/tiles9.png", 543 * 2, 543 * 2, true, false);
+    private static Image tileset = new Image("/tiles10.png", 543 * 2, 543 * 2, true, false);
 
     private static Map<String, Tile> tileMap = new HashMap<>();
     public static ArrayList<Integer> greenery = new ArrayList<>();
@@ -79,6 +79,8 @@ public class Tiles {
         tileMap.put("hurtmonster", new Tile(25, 8));
         tileMap.put("hurtbanshee", new Tile(26, 8));
         tileMap.put("hurtgolem", new Tile(25, 9));
+        tileMap.put("spider", new Tile(28, 5));
+        tileMap.put("hurtspider", new Tile(27, 8));
 
         //EQUIPMENTS
         tileMap.put("shield", new Tile(8,26));

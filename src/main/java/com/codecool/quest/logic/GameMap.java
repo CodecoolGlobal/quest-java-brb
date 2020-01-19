@@ -1,6 +1,5 @@
 package com.codecool.quest.logic;
 
-import com.codecool.quest.Tiles.Tile;
 import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.Ammo;
 
@@ -16,6 +15,7 @@ public class GameMap {
     private Monster monster;
     private Golem golem;
     private Banshee banshee;
+    private Spider spider;
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -36,7 +36,8 @@ public class GameMap {
         List<Cell> gatheredWalls = new ArrayList<>();
         for (int row = 0; row < width; row++) {
             for (int col = 0; col < height; col++){
-                if(getCell(row, col).getTileName().equals("wall")) gatheredWalls.add(getCell(row, col));            }
+                if(getCell(row, col).getTileName().equals("wall")) gatheredWalls.add(getCell(row, col));
+            }
         }
         return gatheredWalls;
     }
@@ -105,5 +106,9 @@ public class GameMap {
 
     public void setBanshee(Banshee banshee) {
         this.banshee = banshee;
+    }
+    
+    public void setSpider(Spider spider) {
+        this.spider = spider;
     }
 }

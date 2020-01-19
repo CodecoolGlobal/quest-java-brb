@@ -1,11 +1,7 @@
 package com.codecool.quest.logic;
 
 import com.codecool.quest.Tiles;
-import com.codecool.quest.logic.actors.Player;
-import com.codecool.quest.logic.actors.Skeleton;
-import com.codecool.quest.logic.actors.Monster;
-import com.codecool.quest.logic.actors.Golem;
-import com.codecool.quest.logic.actors.Banshee;
+import com.codecool.quest.logic.actors.*;
 import com.codecool.quest.logic.items.*;
 
 import java.io.InputStream;
@@ -85,6 +81,10 @@ public class MapLoader {
                         case 'B':
                             cell.setType(CellType.FLOOR);
                             map.setBanshee(new Banshee(cell, map));
+                            break;
+                        case 'Ő':
+                            cell.setType(CellType.FLOOR);
+                            map.setSpider(new Spider(cell));
                             break;
 
                         // items

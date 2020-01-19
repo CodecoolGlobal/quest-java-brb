@@ -520,10 +520,10 @@ public class Main extends Application {
     }
 
     private void saveInventory() {
+        playerInventory = (ArrayList<Consumable>) map.getPlayer().getInventory();
         savedhelmet = map.getPlayer().getHelmet();
         savedshield = map.getPlayer().getShield();
         savedweapon = map.getPlayer().getWeapon();
-        playerInventory = (ArrayList<Consumable>) map.getPlayer().getInventory();
 
     }
 

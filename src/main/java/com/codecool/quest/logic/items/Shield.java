@@ -2,7 +2,6 @@ package com.codecool.quest.logic.items;
 
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.actors.Player;
-
 public class Shield extends Armor {
 
     public Shield(Cell cell) {
