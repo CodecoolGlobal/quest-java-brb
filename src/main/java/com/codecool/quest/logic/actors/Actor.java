@@ -4,9 +4,7 @@ import com.codecool.quest.Main;
 import com.codecool.quest.logic.Cell;
 import com.codecool.quest.logic.Drawable;
 import com.codecool.quest.logic.items.Consumable;
-import com.codecool.quest.logic.items.Item;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +83,7 @@ public abstract class Actor implements Drawable {
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         battle(nextCell);
-        checkObstacle(nextCell);
+        moveActor(nextCell);
 
     }
 
@@ -110,7 +108,7 @@ public abstract class Actor implements Drawable {
 
     }
 
-    private void checkObstacle(Cell nextCell){
+    private void moveActor(Cell nextCell){
         if (!nextCell.isObstacle()) {
             cell.setActor(null);
             nextCell.setActor(this);

@@ -73,6 +73,7 @@ public class Main extends Application {
     Armory savedweapon;
     Helmet savedhelmet;
     Shield savedshield;
+    Cell savedPlayerPosition;
     ProgressIndicator pi = new ProgressIndicator(0);
     HashMap<String, Class<?>> itemTypes = new HashMap<>() {{
         put("KEY", Key.class);
@@ -91,14 +92,13 @@ public class Main extends Application {
     Timeline bulletTimeline = new Timeline(
             new KeyFrame(Duration.seconds(0.2), e -> moveBullets())
     );
-
+    //its basically only used by the cooldown timer
     Timeline veryfast = new Timeline(
-            new KeyFrame(Duration.seconds(0.01), e -> updateSpellProgress())
+            new KeyFrame(Duration.seconds(0.01), e -> {
+                prorefresh();
+                updateSpellProgress();
+            })
     );
-
-    private void updateSpellProgress() {
-        pi.setProgress((double) java.time.Duration.between(map.getPlayer().getSpellLastUsed(), Instant.now()).toMillis() / map.getPlayer().getSpellCooldown());
-    }
 
     private ObservableList<String> inventoryLabels = FXCollections.observableArrayList();
     private static ArrayList<Consumable> playerInventory = new ArrayList<>();
@@ -115,6 +115,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        mainStage = primaryStage;
         setUpCharacterSelect(primaryStage);
     }
 
@@ -122,32 +123,42 @@ public class Main extends Application {
         playerCast = choosenCast;
         map = MapLoader.loadMap(levels[nextLevel], choosenCast);
         canvas = new Canvas(
-                map.getWidth() * Tiles.TILE_WIDTH,
-                map.getHeight() * Tiles.TILE_WIDTH);
+                21 * Tiles.TILE_WIDTH,
+                21 * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
+        setUpUi();
+
+        BorderPane borderPane = new BorderPane();
+        bp = borderPane;
+        borderPane.setCenter(canvas);
+        borderPane.setRight(ui);
+        Scene scene = new Scene(borderPane);
+
+        primaryStage.setScene(scene);
+
+        scene.setOnKeyPressed(this::onKeyPressed);
+        scene.setOnKeyReleased(this::onKeyReleased);
+
+        primaryStage.setTitle("Codecool Quest");
+        primaryStage.show();
+        startAllMovement();
+    }
+
+    private void setUpUi() {
         setUpWindow();
         setUpHealth();
         setUpPower();
         setUpInventory();
+        setUpDurability();
         setUpCombatLogs();
         setSpellProgress();
         setUpBank();
         setUpShop();
         restockShop();
-        ui.setGridLinesVisible(false);
-        ui.setVgap(3);
+        setUpDefense();
+    }
 
-        Label dura = new Label("Durability:");
-
-        ui.add(dura, 0, 6);
-        setLabelStyle(dura, 15);
-        ui.add(helmetDurability, 0, 8);
-        setLabelStyle(helmetDurability, 14);
-        ui.add(shieldDurability, 0, 9);
-        setLabelStyle(shieldDurability, 14);
-        ui.add(weaponDurability, 0, 7);
-        setLabelStyle(weaponDurability, 14);
-
+    private void setUpDefense() {
         Label defense = new Label("Defense: ");
         ui.add(defense, 0, 2);
         setLabelStyle(defense, 15);
@@ -156,22 +167,6 @@ public class Main extends Application {
         setLabelStyle(defenseLabel, 15);
         defenseLabel.setTextFill(Color.PURPLE);
         defenseLabel.setEffect(new Glow(0.5));
-        BorderPane borderPane = new BorderPane();
-        bp = borderPane;
-
-        borderPane.setCenter(canvas);
-        borderPane.setRight(ui);
-
-        Scene scene = new Scene(borderPane);
-        primaryStage.setScene(scene);
-        mainStage = primaryStage;
-        refresh();
-        scene.setOnKeyPressed(this::onKeyPressed);
-        scene.setOnKeyReleased(this::onKeyReleased);
-
-        primaryStage.setTitle("Codecool Quest");
-        primaryStage.show();
-        startAllMovement();
     }
 
     public void setSpellProgress() {
@@ -184,6 +179,20 @@ public class Main extends Application {
     public void setUpWindow() {
         ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
+        ui.setVgap(3);
+    }
+
+    public void setUpDurability() {
+        Label dura = new Label("Durability:");
+        ui.add(dura, 0, 6);
+        setLabelStyle(dura, 15);
+        ui.add(helmetDurability, 0, 8);
+        setLabelStyle(helmetDurability, 14);
+        ui.add(shieldDurability, 0, 9);
+        setLabelStyle(shieldDurability, 14);
+        ui.add(weaponDurability, 0, 7);
+        setLabelStyle(weaponDurability, 14);
+
     }
 
     public void setUpBank() {
@@ -199,12 +208,10 @@ public class Main extends Application {
 
 
     public void setUpCharacterSelect(Stage primaryStage) {
-
         Button cast1 = new Button("");
         cast1.setPadding(new Insets(250, 120, 250, 120));
         cast1.setBackground(Background.EMPTY);
         cast1.setOnAction(e -> setUpMain(primaryStage, Warrior.class));
-
 
         Button cast2 = new Button("");
         cast2.setPadding(new Insets(250, 120, 250, 120));
@@ -214,18 +221,13 @@ public class Main extends Application {
         Button cast3 = new Button("");
         cast3.setBackground(Background.EMPTY);
         cast3.setPadding(new Insets(250, 120, 250, 120));
-
         cast3.setOnAction(e -> setUpMain(primaryStage, Mage.class));
 
-        // Create the HBox
         HBox buttonBox = new HBox();
         buttonBox.setPadding(new Insets(0, 30, 0, 25));
-        // Add the children to the HBox
         buttonBox.getChildren().addAll(cast1, cast2, cast3);
-        // Set the vertical spacing between children to 15px
         buttonBox.setSpacing(10);
 
-        // Create the VBox
         VBox root = new VBox();
         FileInputStream file = null;
         try {
@@ -237,21 +239,13 @@ public class Main extends Application {
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
         root.setBackground(new Background(myBI));
-        // Add the children to the VBox
         root.getChildren().addAll(buttonBox);
-        // Set the vertical spacing between children to X
         root.setSpacing(0);
-        // Set the Size of the VBox
         root.setMinSize(800, 600);
 
-
-        // Create the Scene
         Scene scene = new Scene(root);
-        // Add the scene to the Stage
         primaryStage.setScene(scene);
-        // Set the title of the Stage
         primaryStage.setTitle("Character Select");
-        // Display the Stage
         primaryStage.show();
 
     }
@@ -343,6 +337,11 @@ public class Main extends Application {
         combatingLabel.setAlignment(Pos.TOP_LEFT);
     }
 
+    private void updateSpellProgress() {
+        pi.setProgress((double) java.time.Duration.between(map.getPlayer().getSpellLastUsed(), Instant.now()).toMillis() / map.getPlayer().getSpellCooldown());
+    }
+
+
     public void startAllMovement() {
         slowTimeline.setCycleCount(Animation.INDEFINITE);
         fastTimeline.setCycleCount(Animation.INDEFINITE);
@@ -361,10 +360,11 @@ public class Main extends Application {
     private void itemUsed() {
         Class<?> item = itemTypes.get(inventoryList.getSelectionModel().getSelectedItem());
         map.getPlayer().useItem(item);
-        if (item == Shovel.class && map.getPlayer().isDiggable()){
+        if (item == Shovel.class && map.getPlayer().isDiggable()) {
+            savedPlayerPosition = map.getPlayer().getCell();
             dig();
         }
-        refresh();
+        //refresh();
         updateInventory();
     }
 
@@ -466,13 +466,12 @@ public class Main extends Application {
                 break;
 
         }
-        refresh();
+        // refresh();
         if (map.getPlayer().isStairs()) {
             saveInventory();
             setStage(levels[++nextLevel]);
             loadInventory();
-        }
-        else if (map.getPlayer().isObjective()) {
+        } else if (map.getPlayer().isObjective()) {
             showVictoryAlert();
         }
         if (map.getPlayer().isShop()) {
@@ -489,6 +488,7 @@ public class Main extends Application {
         saveInventory();
         setStage(levels[nextLevel]);
         loadInventory();
+        map.movePlayeToCell(savedPlayerPosition);
     }
 
     private void closeShop() {
@@ -509,11 +509,7 @@ public class Main extends Application {
     }
 
     public void setStage(String level) {
-
         map = MapLoader.loadMap(level, playerCast);
-        canvas = new Canvas(
-                map.getWidth() * Tiles.TILE_WIDTH,
-                map.getHeight() * Tiles.TILE_WIDTH);
         context = canvas.getGraphicsContext2D();
         bp.setCenter(canvas);
         restockShop();
@@ -586,24 +582,25 @@ public class Main extends Application {
         for (Ammo bullet : map.getAllAmmos()) {
             bullet.moveBullet();
         }
-        refresh();
     }
 
-    private void refresh() {
+    private void prorefresh() {
+        int playerX = map.getPlayer().getX();
+        int playerY = map.getPlayer().getY();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         Tiles.iterator = Tiles.greenery.listIterator();
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
+        for (int x = playerX - 10; x < playerX + 11; x++) {
+            for (int y = playerY - 10; y < playerY + 11; y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x, y, playerX, playerY);
                 } else if (cell.getItem() != null) {
-                    Tiles.drawTile(context, cell.getItem(), x, y);
+                    Tiles.drawTile(context, cell.getItem(), x, y, playerX, playerY);
                 } else if (cell.getAmmo() != null) {
-                    Tiles.drawTile(context, cell.getAmmo(), x, y);
+                    Tiles.drawTile(context, cell.getAmmo(), x, y, playerX, playerY);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x, y, playerX, playerY);
                 }
             }
         }

@@ -30,15 +30,11 @@ public class Banshee extends Enemy {
     }
 
 
-        @Override
-    public String getTileName() {
-        return tileName;
-    }
 
     @Override
-    public void move(int dx, int dy){
+    public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getActor() == null){
+        if (nextCell.getActor() == null) {
             battle(nextCell);
             cell.setActor(null);
             nextCell.setActor(this);
