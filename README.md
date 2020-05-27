@@ -31,12 +31,12 @@ javafx:compile javafx:run
 
 ## Controls
 
-W - move up  
-S - move down  
-A - move left  
-D - move right  
-Enter - pick up item  
-Q - use spell(after cooldown)  
+* W - move up  
+* S - move down  
+* A - move left  
+* D - move right  
+* Enter - pick up item  
+* Q - use spell(after cooldown)  
 
 Battle  
 With melee weapon: You can attack by colliding with enemies  
@@ -69,10 +69,10 @@ The tiles used in the game are from [1-Bit Pack by Kenney](https://kenney.nl/ass
 
 ## Authors
 
-Szentkúti Adrián,
-Jeneses Dávid
+* Szentkúti Adrián
+* Jeneses Dávid
 
 ## Contacts
 
-szentkuti.adrian@gmail.com, 
-jenesesd@gmail.com
+* szentkuti.adrian@gmail.com
+* jenesesd@gmail.com
