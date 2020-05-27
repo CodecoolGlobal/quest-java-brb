@@ -2,6 +2,9 @@
 
 This is a simple tile-based RPG game.
 
+## License
+  Apache-2.0
+
 ## Opening the project
 
 Open the project in IntelliJ IDEA. This is a Maven project, so you will need to open `pom.xml`.
